@@ -1,5 +1,6 @@
 package com.example.ilovecoffee.dto.menu.response;
 
+import com.example.ilovecoffee.domain.entity.menu.MenuStatus;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
@@ -11,7 +12,7 @@ public record AdminMenuResponse(
         String description,
         int price,
         int stock,
-        boolean isActive,
+        MenuStatus menuStatus,
         LocalDateTime createdAt,
         LocalDateTime deletedAt
 ) {

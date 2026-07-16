@@ -13,6 +13,7 @@ public class OrderItem {
 
     private Long id;
     private String name;
-    private String price;
+    private long price;
+    private int quantity;
 
 }

@@ -1,5 +1,6 @@
 package com.example.ilovecoffee.dto.menu.response;
 
+import com.example.ilovecoffee.domain.entity.menu.MenuStatus;
 import lombok.Builder;
 
 @Builder
@@ -9,7 +10,7 @@ public record MenuResponse(
         String description,
         int price,
         int stock,
-        boolean isActive
+        MenuStatus menuStatus
 ) {
 
 }

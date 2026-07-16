@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MenuMapper {
+
     public MenuResponse toMenuResponse(Menu menu) {
         return MenuResponse.builder()
                 .id(menu.getId())
@@ -14,20 +15,21 @@ public class MenuMapper {
                 .description(menu.getDescription())
                 .price(menu.getPrice())
                 .stock(menu.getStock())
-                .isActive(menu.isActive())
+                .menuStatus(menu.getMenuStatus())
                 .build();
     }
 
-    public AdminMenuResponse toAdminResponse(Menu menu) {
+    public AdminMenuResponse toAdminMenuResponse(Menu menu) {
         return AdminMenuResponse.builder()
                 .id(menu.getId())
                 .name(menu.getName())
                 .description(menu.getDescription())
                 .price(menu.getPrice())
                 .stock(menu.getStock())
-                .isActive(menu.isActive())
+                .menuStatus(menu.getMenuStatus())
                 .createdAt(menu.getCreatedAt())
                 .deletedAt(menu.getDeletedAt())
                 .build();
     }
+
 }
