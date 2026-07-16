@@ -1,17 +1,11 @@
-package com.example.ilovecoffee.domain.entity;
+package com.example.ilovecoffee.dto.repsonse;
 
-import lombok.*;
+import com.example.ilovecoffee.domain.entity.OrderItem;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static lombok.AccessLevel.PROTECTED;
-
-@Builder
-@Getter
-@NoArgsConstructor(access = PROTECTED)
-@AllArgsConstructor
-public class Order {
+public class OrderUnitResponse {
     private Long id; // PK
     private String email;
     private String address;

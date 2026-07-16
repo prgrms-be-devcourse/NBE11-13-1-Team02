@@ -11,9 +11,11 @@ import static lombok.AccessLevel.PROTECTED;
 public class Menu {
     private Long id;
     private String name;
-    private String description;
     private int price;
+    private String description;
     private int stock;
-    boolean manuallySoldOut;
+    private boolean isActive;
+
+    private LocalDateTime createdAt;
     private LocalDateTime deletedAt;
 }
