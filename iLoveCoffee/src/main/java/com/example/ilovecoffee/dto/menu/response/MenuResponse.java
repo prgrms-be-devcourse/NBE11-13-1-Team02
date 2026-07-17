@@ -8,9 +8,9 @@ public record MenuResponse(
         Long id,
         String name,
         String description,
-        int price,
+        long price,
         int stock,
-        MenuStatus menuStatus
+        boolean soldOut
 ) {
 
 }

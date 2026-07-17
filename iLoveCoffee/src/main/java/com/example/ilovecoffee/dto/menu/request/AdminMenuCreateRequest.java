@@ -6,8 +6,7 @@ import lombok.Builder;
 public record AdminMenuCreateRequest(
         String name,
         String description,
-        int price,
-        int stock,
-        boolean isActive
+        long price,
+        int stock
 ) {
 }

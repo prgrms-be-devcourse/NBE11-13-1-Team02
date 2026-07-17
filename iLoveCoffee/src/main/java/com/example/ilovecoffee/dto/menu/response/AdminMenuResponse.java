@@ -10,9 +10,9 @@ public record AdminMenuResponse(
         Long id,
         String name,
         String description,
-        int price,
+        long price,
         int stock,
-        MenuStatus menuStatus,
+        MenuStatus status,
         LocalDateTime createdAt,
         LocalDateTime deletedAt
 ) {
