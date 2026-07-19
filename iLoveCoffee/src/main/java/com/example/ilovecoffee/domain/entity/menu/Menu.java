@@ -1,5 +1,6 @@
 package com.example.ilovecoffee.domain.entity.menu;
 
+import com.example.ilovecoffee.domain.enums.MenuStatus;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

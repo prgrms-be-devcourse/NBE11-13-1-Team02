@@ -1,4 +1,4 @@
-package com.example.ilovecoffee.domain.entity.menu;
+package com.example.ilovecoffee.domain.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

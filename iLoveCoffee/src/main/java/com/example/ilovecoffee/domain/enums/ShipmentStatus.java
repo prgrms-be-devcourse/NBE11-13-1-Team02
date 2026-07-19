@@ -1,4 +1,4 @@
-package com.example.ilovecoffee.domain.entity.order;
+package com.example.ilovecoffee.domain.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

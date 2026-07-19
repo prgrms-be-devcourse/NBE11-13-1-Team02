@@ -1,11 +1,13 @@
 package com.example.ilovecoffee.dto.order.response;
 
-import com.example.ilovecoffee.domain.entity.order.OrderStatus;
-import com.example.ilovecoffee.domain.entity.order.ShipmentStatus;
+import com.example.ilovecoffee.domain.enums.OrderStatus;
+import com.example.ilovecoffee.domain.enums.ShipmentStatus;
+import lombok.Builder;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Builder
 public record OrderResponse(
         Long id,
         String email,

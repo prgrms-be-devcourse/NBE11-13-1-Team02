@@ -1,6 +1,6 @@
 package com.example.ilovecoffee.dto.menu.response;
 
-import com.example.ilovecoffee.domain.entity.menu.MenuStatus;
+import com.example.ilovecoffee.domain.enums.MenuStatus;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
