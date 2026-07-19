@@ -518,6 +518,48 @@ quantity
 |---|---|
 | subtotal | price × quantity |
 
+
+## 상태 변경 규칙
+
+주문 및 메뉴 상태를 변경할 때 외부 계층에서 Enum 값을 직접 지정하거나 필드를 직접 변경하지 않습니다.
+
+상태 변경은 각 Entity가 제공하는 도메인 메서드를 통해 수행합니다.
+
+### Menu
+
+```java
+menu.activate();
+menu.deactivate();
+menu.delete();
+```
+
+### Order
+
+```java
+order.confirm();
+order.prepare();
+order.dispatch();
+order.delivered();
+```
+
+이를 통해 상태 변경과 함께 필요한 시간 값 및 연관 상태가 일관되게 변경되도록 합니다.
+
+예를 들어 주문 출고 시 `OrderStatus.SHIPPED`와 `ShipmentStatus.SHIPPING`을 각각 직접 지정하는 대신 다음 메서드를 호출합니다.
+
+```java
+order.dispatch();
+```
+
+`dispatch()`는 다음 변경을 한 번에 처리합니다.
+
+```text
+orderStatus = SHIPPED
+shipmentStatus = SHIPPING
+dispatchAt = 현재 시간
+```
+
+> DTO는 요청과 응답 데이터를 전달하는 역할을 담당하며, 실제 상태 변경은 Entity의 도메인 메서드가 담당합니다.
+
 ## Order Relationship
 
 ```text
