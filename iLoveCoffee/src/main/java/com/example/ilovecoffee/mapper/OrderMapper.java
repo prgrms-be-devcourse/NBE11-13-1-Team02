@@ -17,6 +17,7 @@ public class OrderMapper {
                 .subtotal(item.getQuantity() * item.getPrice())
                 .build();
     }
+
     public OrderResponse toOrderResponse(Order order) {
         List<OrderItemResponse> items = order.getItems().stream()
                 .map(this::toOrderItemResponse)
@@ -32,4 +33,5 @@ public class OrderMapper {
                 .shipmentStatus(order.getShipmentStatus())
                 .build();
     }
+
 }

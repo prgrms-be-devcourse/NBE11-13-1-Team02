@@ -40,14 +40,12 @@ public class Menu {
             String name,
             String description,
             long price,
-            int stock,
-            MenuStatus status
+            int stock
     ) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.stock = stock;
-        this.status = status;
         this.updatedAt = LocalDateTime.now();
     }
 
