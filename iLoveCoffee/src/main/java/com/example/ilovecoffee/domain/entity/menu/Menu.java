@@ -28,6 +28,7 @@ public class Menu {
     @Enumerated(EnumType.STRING)
     private MenuStatus status;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
 
     public void delete() {
@@ -47,6 +48,7 @@ public class Menu {
         this.price = price;
         this.stock = stock;
         this.status = status;
+        this.updatedAt = LocalDateTime.now();
     }
 
     public void activate() {

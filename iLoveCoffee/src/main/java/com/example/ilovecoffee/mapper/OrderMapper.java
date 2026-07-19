@@ -8,7 +8,7 @@ import com.example.ilovecoffee.dto.order.response.OrderResponse;
 import java.util.List;
 
 public class OrderMapper {
-    public OrderItemResponse toOrderItemResponse(OrderItem item) {
+    private OrderItemResponse toOrderItemResponse(OrderItem item) {
         return OrderItemResponse.builder()
                 .menuId(item.getMenuId())
                 .name(item.getName())

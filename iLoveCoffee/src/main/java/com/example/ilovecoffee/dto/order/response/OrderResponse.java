@@ -1,7 +1,9 @@
 package com.example.ilovecoffee.dto.order.response;
 
+import com.example.ilovecoffee.constant.DateformatConstant;
 import com.example.ilovecoffee.domain.enums.OrderStatus;
 import com.example.ilovecoffee.domain.enums.ShipmentStatus;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 
 import java.time.LocalDateTime;
@@ -20,6 +22,13 @@ public record OrderResponse(
         OrderStatus orderStatus,
         ShipmentStatus shipmentStatus,
 
-        LocalDateTime orderAt
+        @JsonFormat(pattern = DateformatConstant.DATE_FORMAT)
+        LocalDateTime orderAt,
+
+        @JsonFormat(pattern = DateformatConstant.DATE_FORMAT)
+        LocalDateTime dispatchAt,
+
+        @JsonFormat(pattern = DateformatConstant.DATE_FORMAT)
+        LocalDateTime deliveredAt
 ) {
 }
