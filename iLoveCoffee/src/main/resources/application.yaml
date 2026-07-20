@@ -1,3 +1,28 @@
 spring:
   application:
     name: iLoveCoffee
+
+  datasource:
+    url: jdbc:h2:tcp://localhost:9092/mem:testdb;MODE=MySQL;CASE_INSENSITIVE_IDENTIFIERS=TRUE;NON_KEYWORDS=USER
+    driver-class-name: org.h2.Driver
+    username: sa
+    password:
+
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: none
+    defer-datasource-initialization: true
+
+  sql:
+    init:
+      mode: always
+      schema-locations:
+        - classpath:menu.sql
+        - classpath:order.sql
+        - classpath:order_item.sql
+
+logging:
+  level:
+    org.springframework.jdbc.datasource.init: DEBUG
+    org.springframework.boot.autoconfigure.sql.init: DEBUG
