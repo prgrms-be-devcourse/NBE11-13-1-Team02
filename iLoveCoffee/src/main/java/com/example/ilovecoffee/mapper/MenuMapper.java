@@ -33,6 +33,7 @@ public class MenuMapper {
                 .stock(menu.getStock())
                 .status(menu.getStatus())
                 .createdAt(menu.getCreatedAt())
+                .updatedAt(menu.getUpdatedAt())
                 .deletedAt(menu.getDeletedAt())
                 .build();
     }
