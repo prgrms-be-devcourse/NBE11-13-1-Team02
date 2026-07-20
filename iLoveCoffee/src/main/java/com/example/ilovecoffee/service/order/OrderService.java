@@ -85,21 +85,30 @@ public class OrderService {
     public void cancelOrder(Long id) {
         Order order = orderRepository.findById(id)
                 .orElseThrow(OrderNotFoundException::new);
+        order.cancel();
+        restoreStock(order);
+    }
 
-
-
+    private void restoreStock(Order order) {
+        for(OrderItem item : order.getItems()) {
+            Menu menu = menuRepository.findById(item.getMenuId())
+                    .orElseThrow(MenuNotFoundException::new);
+            menu.restoreStock(item.getQuantity());
+        }
     }
 
     @Transactional
     public void deleteById(Long id) {
         Order order = orderRepository.findById(id)
                 .orElseThrow(OrderNotFoundException::new);
+        order.validateDeletable();
         orderRepository.delete(order);
     }
 
     @Transactional
     public void deleteAllByEmail(String email) {
         var orders = orderRepository.findAllByEmail(email);
+        for(var order : orders) order.validateDeletable();
         orderRepository.deleteAll(orders);
     }
 

@@ -14,5 +14,8 @@ public enum OrderStatus {
     CANCELED("주문 취소");
 
 
+    public boolean canDelete() {
+        return this == COMPLETED || this == CANCELED;
+    }
     private final String comment;
 }

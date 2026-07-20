@@ -77,10 +77,18 @@ public class Menu {
         }
     }
 
-    public void increase(int quantity) {
+    private void increase(int quantity) {
         if(quantity <= 0) {
             throw new InvalidQuantityException();
         }
         stock += quantity;
+    }
+
+    public void restoreStock(int quantity) {
+        this.increase(quantity);
+    }
+
+    public void replenishStock(int quantity) {
+        this.increase(quantity);
     }
 }
