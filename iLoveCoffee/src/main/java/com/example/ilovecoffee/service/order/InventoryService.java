@@ -20,11 +20,12 @@ public class InventoryService {
 
     public void increase(Long menuId, int quantity) {
         Menu menu = findMenu(menuId);
-        menu.restoreStock(quantity);
+        menu.replenishStock(quantity);
     }
 
     public void restore(Long menuId, int quantity) {
-        this.increase(menuId, quantity);
+       Menu menu = findMenu(menuId);
+       menu.restoreStock(quantity);
     }
 
     private Menu findMenu(Long menuId) {
