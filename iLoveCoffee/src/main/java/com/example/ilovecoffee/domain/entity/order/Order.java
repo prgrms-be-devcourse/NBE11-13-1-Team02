@@ -46,9 +46,15 @@ public class Order {
     private LocalDateTime dispatchAt = null;
     private LocalDateTime deliveredAt = null;
 
+    public void suspend() {
+        this.orderStatus = OrderStatus.PENDING;
+        this.shipmentStatus = ShipmentStatus.PENDING;
+        this.orderAt = LocalDateTime.now();
+    }
+
     public void confirm() {
         this.orderStatus = OrderStatus.CONFIRMED;
-        this.orderAt = LocalDateTime.now();
+        this.shipmentStatus = ShipmentStatus.PENDING;
     }
 
     public void prepare() {
