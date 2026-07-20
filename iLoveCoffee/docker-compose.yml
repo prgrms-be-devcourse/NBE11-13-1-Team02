@@ -1,0 +1,12 @@
+version: '3.8'
+
+services:
+  h2-db:
+    image: eclipse-temurin:17-jre
+    container_name: h2-db
+    ports:
+      - "8082:8082" # Web Console
+      - "9092:9092" # TCP Port
+    command: >
+      bash -c "curl -sL https://repo1.maven.org/maven2/com/h2database/h2/2.2.224/h2-2.2.224.jar -o /tmp/h2.jar &&
+               java -cp /tmp/h2.jar org.h2.tools.Server -web -webAllowOthers -webPort 8082 -tcp -tcpAllowOthers -tcpPort 9092 -ifNotExists"
