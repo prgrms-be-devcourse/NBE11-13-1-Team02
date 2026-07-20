@@ -1,13 +1,13 @@
 package com.example.ilovecoffee.dto.menu.request;
 
+import com.example.ilovecoffee.domain.enums.MenuStatus;
 import lombok.Builder;
 
 @Builder
 public record AdminMenuUpdateRequest (
         String name,
         String description,
-        int price,
-        int stock,
-        boolean isActive
+        long price,
+        int stock
 ) {
 }
