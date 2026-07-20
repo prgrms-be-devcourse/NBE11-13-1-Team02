@@ -37,9 +37,9 @@ public class OrderService {
                 request.address(),
                 orderItems
         );
+
         order.suspend();
         Order saved = orderRepository.save(order);
-
         return orderMapper.toOrderResponse(saved);
     }
 
@@ -58,8 +58,14 @@ public class OrderService {
     }
 
     @Transactional
-    public void preparePendingOrders() {
+    public void confirmPendingOrders() {
         orderRepository.findAllByOrderStatus(OrderStatus.PENDING)
+                .forEach(Order::confirm);
+    }
+
+    @Transactional
+    public void prepareConfirmingOrders() {
+        orderRepository.findAllByOrderStatus(OrderStatus.CONFIRMED)
                 .forEach(Order::prepare);
     }
 
@@ -76,6 +82,15 @@ public class OrderService {
     }
 
     @Transactional
+    public void cancelOrder(Long id) {
+        Order order = orderRepository.findById(id)
+                .orElseThrow(OrderNotFoundException::new);
+
+
+
+    }
+
+    @Transactional
     public void deleteById(Long id) {
         Order order = orderRepository.findById(id)
                 .orElseThrow(OrderNotFoundException::new);
@@ -89,8 +104,9 @@ public class OrderService {
     }
 
     private OrderItem createOrderItem(OrderItemRequest request) {
-        Menu menu = menuRepository.findById(request.menuId()).orElseThrow(MenuNotFoundException::new);
-
+        Menu menu = menuRepository.findById(request.menuId())
+                .orElseThrow(MenuNotFoundException::new);
+        menu.decrease(request.quantity());
         return OrderItem.from(menu, request.quantity());
     }
 }

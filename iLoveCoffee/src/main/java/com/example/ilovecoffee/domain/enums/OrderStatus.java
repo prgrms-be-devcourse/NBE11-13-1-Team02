@@ -10,7 +10,8 @@ public enum OrderStatus {
     CONFIRMED("주문 확정"),
     PREPARING("상품 준비 중"),
     DISPATCHED("출고 완료"),
-    COMPLETED("상품 배송 완료");
+    COMPLETED("상품 배송 완료"),
+    CANCELED("주문 취소");
 
 
     private final String comment;

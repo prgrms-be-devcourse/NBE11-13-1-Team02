@@ -74,6 +74,10 @@ public class Order {
         this.deliveredAt = LocalDateTime.now();
     }
 
+    public void cancel() {
+
+    }
+
     public static Order create(
             String email,
             String postNumber,
