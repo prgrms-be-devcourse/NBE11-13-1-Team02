@@ -1,8 +1,10 @@
 package com.example.ilovecoffee.service.menu;
 
 import com.example.ilovecoffee.domain.entity.menu.Menu;
+import com.example.ilovecoffee.domain.entity.menu.MenuVersion;
 import com.example.ilovecoffee.domain.enums.MenuStatus;
 import com.example.ilovecoffee.domain.repository.MenuRepository;
+import com.example.ilovecoffee.domain.repository.MenuVersionRepository;
 import com.example.ilovecoffee.dto.menu.request.AdminMenuCreateRequest;
 import com.example.ilovecoffee.dto.menu.request.AdminMenuUpdateRequest;
 import com.example.ilovecoffee.dto.menu.response.AdminMenuResponse;
@@ -23,6 +25,7 @@ public class MenuService {
 
     private final MenuMapper menuMapper;
     private final MenuRepository menuRepository;
+    private final MenuVersionRepository menuVersionRepository;
 
     // 고객용
     public List<MenuResponse> findAllForCustomer() {
@@ -33,7 +36,7 @@ public class MenuService {
 
     public MenuResponse findByIdForCustomer(Long id) {
         Menu menu = menuRepository.findByIdAndStatusNot(id, MenuStatus.DELETED)
-                .orElseThrow(() -> new MenuNotFoundException(id));
+                .orElseThrow(MenuNotFoundException::new);
 
         return menuMapper.toMenuResponse(menu);
     }
@@ -42,32 +45,42 @@ public class MenuService {
     @Transactional
     public AdminMenuResponse create(AdminMenuCreateRequest request) {
         Menu menu = menuMapper.toEntity(request);
-        return menuMapper.toAdminMenuResponse(menuRepository.save(menu));
+        Menu savedMenu = menuRepository.save(menu);
+
+        return menuMapper.toAdminMenuResponse(savedMenu);
     }
 
     @Transactional
-    public AdminMenuResponse update(Long id, AdminMenuUpdateRequest request) {
+    public AdminMenuResponse update(
+            Long id,
+            AdminMenuUpdateRequest request
+    ) {
         Menu menu = findByIdOrThrow(id);
+        archive(menu);
         menuMapper.updateEntity(menu, request);
+        menu.updateStock(request.stock());
         return menuMapper.toAdminMenuResponse(menu);
     }
 
     @Transactional
     public void softDelete(Long id) {
-        findByIdOrThrow(id).softDelete();
+        Menu menu = findByIdOrThrow(id);
+        menu.softDelete();
     }
 
     @Transactional
     public void restore(Long id) {
-        findByIdOrThrow(id).activate();
+        Menu menu = findByIdOrThrow(id);
+        menu.activate();
     }
 
     @Transactional
     public void permanentlyDelete(Long id) {
         Menu menu = findByIdOrThrow(id);
-        if (menu.getStatus() != MenuStatus.DELETED) {
-            throw new MenuNotInTrashException();
-        }
+
+        validateDeletedMenu(menu);
+
+        archive(menu);
         menuRepository.delete(menu);
     }
 
@@ -77,7 +90,19 @@ public class MenuService {
                 .toList();
     }
 
+    private void archive(Menu menu) {
+        MenuVersion menuVersion = MenuVersion.from(menu);
+        menuVersionRepository.save(menuVersion);
+    }
+
+    private void validateDeletedMenu(Menu menu) {
+        if (menu.getStatus() != MenuStatus.DELETED) {
+            throw new MenuNotInTrashException();
+        }
+    }
+
     private Menu findByIdOrThrow(Long id) {
-        return menuRepository.findById(id).orElseThrow(() -> new MenuNotFoundException(id));
+        return menuRepository.findById(id)
+                .orElseThrow(MenuNotFoundException::new);
     }
 }

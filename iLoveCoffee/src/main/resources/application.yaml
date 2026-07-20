@@ -19,6 +19,7 @@ spring:
       mode: always
       schema-locations:
         - classpath:menu.sql
+        - classpath:menu_version.sql
         - classpath:order.sql
         - classpath:order_item.sql
 

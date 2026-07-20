@@ -57,12 +57,18 @@ public class MenuMapper {
             Menu menu,
             AdminMenuUpdateRequest request
     ) {
-        menu.update(
+        menu.updateInfo(
                 request.name(),
                 request.description(),
-                request.price(),
-                request.stock()
+                request.price()
         );
+    }
+
+    public void updateStock(
+            Menu menu,
+            int stock
+    ) {
+        menu.updateStock(stock);
     }
 
 }

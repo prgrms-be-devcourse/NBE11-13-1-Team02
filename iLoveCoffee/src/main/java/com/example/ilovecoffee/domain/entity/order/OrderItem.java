@@ -24,18 +24,11 @@ public class OrderItem {
     private Long id;
 
     private Long menuId;
+    private long menuVersion;
     private String name;
     private long price;
     private int quantity;
 
-    public static OrderItem of(
-            Long menuId,
-            String name,
-            long price,
-            int quantity
-    ) {
-        return new OrderItem(null, menuId, name, price, quantity);
-    }
 
     public static OrderItem from(
             Menu menu,
@@ -43,6 +36,7 @@ public class OrderItem {
     ) {
         return OrderItem.builder()
                 .menuId(menu.getId())
+                .menuVersion(menu.getVersion())
                 .name(menu.getName())
                 .price(menu.getPrice())
                 .quantity(quantity)
