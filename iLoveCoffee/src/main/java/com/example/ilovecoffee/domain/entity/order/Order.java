@@ -74,4 +74,24 @@ public class Order {
         this.deliveredAt = LocalDateTime.now();
     }
 
+    public static Order create(
+            String email,
+            String postNumber,
+            String address,
+            List<OrderItem> items
+    ) {
+        long totalPrice = items.stream()
+                .mapToLong(item -> item.getPrice() * item.getQuantity())
+                .sum();
+
+        return Order.builder()
+                .email(email)
+                .postNumber(postNumber)
+                .address(address)
+                .items(new ArrayList<>(items))
+                .totalPrice(totalPrice)
+                .orderAt(LocalDateTime.now())
+                .build();
+    }
+
 }

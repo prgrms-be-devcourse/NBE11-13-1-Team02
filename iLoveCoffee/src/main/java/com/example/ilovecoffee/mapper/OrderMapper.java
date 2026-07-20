@@ -4,9 +4,11 @@ import com.example.ilovecoffee.domain.entity.order.Order;
 import com.example.ilovecoffee.domain.entity.order.OrderItem;
 import com.example.ilovecoffee.dto.order.response.OrderItemResponse;
 import com.example.ilovecoffee.dto.order.response.OrderResponse;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
+@Component
 public class OrderMapper {
     private OrderItemResponse toOrderItemResponse(OrderItem item) {
         return OrderItemResponse.builder()
@@ -14,7 +16,7 @@ public class OrderMapper {
                 .name(item.getName())
                 .price(item.getPrice())
                 .quantity(item.getQuantity())
-                .subtotal(item.getQuantity() * item.getPrice())
+                .subtotal(item.getSubtotal())
                 .build();
     }
 

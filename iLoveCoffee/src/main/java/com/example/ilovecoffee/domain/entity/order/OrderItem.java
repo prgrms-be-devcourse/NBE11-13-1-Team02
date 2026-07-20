@@ -1,5 +1,6 @@
 package com.example.ilovecoffee.domain.entity.order;
 
+import com.example.ilovecoffee.domain.entity.menu.Menu;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -34,6 +35,22 @@ public class OrderItem {
             int quantity
     ) {
         return new OrderItem(null, menuId, name, price, quantity);
+    }
+
+    public static OrderItem from(
+            Menu menu,
+            int quantity
+    ) {
+        return OrderItem.builder()
+                .menuId(menu.getId())
+                .name(menu.getName())
+                .price(menu.getPrice())
+                .quantity(quantity)
+                .build();
+    }
+
+    public long getSubtotal() {
+        return quantity * price;
     }
 
 }
