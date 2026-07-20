@@ -57,12 +57,12 @@ public class Order {
     }
 
     public void dispatch() {
-        this.orderStatus = OrderStatus.SHIPPED;
+        this.orderStatus = OrderStatus.DISPATCHED;
         this.shipmentStatus = ShipmentStatus.SHIPPING;
         this.dispatchAt = LocalDateTime.now();
     }
 
-    public void delivered() {
+    public void deliver() {
         this.orderStatus = OrderStatus.COMPLETED;
         this.shipmentStatus = ShipmentStatus.DELIVERED;
         this.deliveredAt = LocalDateTime.now();

@@ -243,7 +243,7 @@ yyyy-MM-dd HH:mm:ss
 | confirm() | CONFIRMED | 변경 없음 | orderAt 기록 |
 | prepare() | PREPARING | PENDING | 변경 없음 |
 | dispatch() | SHIPPED | SHIPPING | dispatchAt 기록 |
-| delivered() | COMPLETED | DELIVERED | deliveredAt 기록 |
+| deliver() | COMPLETED | DELIVERED | deliveredAt 기록 |
 
 </details>
 
@@ -450,15 +450,15 @@ subtotal = price × quantity
 <details>
 <summary><strong>OrderStatus</strong></summary>
 
-| Value | Description |
-|---|---|
-| CONFIRMED | 주문 확정 |
-| PAID | 결제 완료 |
-| PREPARING | 상품 준비 중 |
-| COMPLETED | 상품 배송 완료 |
-| SHIPPED | 출고 완료 |
-| CANCELED | 주문 취소 |
-| REFUNDED | 환불 완료 |
+| Value      | Description |
+|------------|---|
+| CONFIRMED  | 주문 확정 |
+| PAID       | 결제 완료 |
+| PREPARING  | 상품 준비 중 |
+| COMPLETED  | 상품 배송 완료 |
+| DISPATCHED | 출고 완료 |
+| CANCELED   | 주문 취소 |
+| REFUNDED   | 환불 완료 |
 
 </details>
 
@@ -539,12 +539,12 @@ menu.delete();
 order.confirm();
 order.prepare();
 order.dispatch();
-order.delivered();
+order.deliver();
 ```
 
 이를 통해 상태 변경과 함께 필요한 시간 값 및 연관 상태가 일관되게 변경되도록 합니다.
 
-예를 들어 주문 출고 시 `OrderStatus.SHIPPED`와 `ShipmentStatus.SHIPPING`을 각각 직접 지정하는 대신 다음 메서드를 호출합니다.
+예를 들어 주문 출고 시 `OrderStatus.DISPATCHED`와 `ShipmentStatus.SHIPPING`을 각각 직접 지정하는 대신 다음 메서드를 호출합니다.
 
 ```java
 order.dispatch();
@@ -553,7 +553,7 @@ order.dispatch();
 `dispatch()`는 다음 변경을 한 번에 처리합니다.
 
 ```text
-orderStatus = SHIPPED
+orderStatus = DISPATCHED
 shipmentStatus = SHIPPING
 dispatchAt = 현재 시간
 ```

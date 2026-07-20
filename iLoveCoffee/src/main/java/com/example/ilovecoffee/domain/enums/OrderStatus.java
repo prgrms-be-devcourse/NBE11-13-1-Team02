@@ -10,7 +10,7 @@ public enum OrderStatus {
     PAID("결제 완료"),
     PREPARING("상품 준비 중"),
     COMPLETED("상품 배송 완료"),
-    SHIPPED("출고 완료"),
+    DISPATCHED("출고 완료"),
     CANCELED("주문 취소"),
     REFUNDED("환불 완료");
 

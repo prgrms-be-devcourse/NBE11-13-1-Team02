@@ -31,11 +31,12 @@ public class Menu {
     private LocalDateTime updatedAt;
     private LocalDateTime deletedAt;
 
-    public void delete() {
+    public void softDelete() {
         if(status == MenuStatus.DELETED) return;
         this.status = MenuStatus.DELETED;
         this.deletedAt = LocalDateTime.now();
     }
+
     public void update(
             String name,
             String description,
