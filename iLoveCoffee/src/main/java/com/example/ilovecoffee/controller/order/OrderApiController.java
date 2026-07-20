@@ -17,7 +17,7 @@ import java.util.List;
 public class OrderApiController {
     private final OrderService orderService;
 
-    @PostMapping(PathConstant.CREATE)
+    @PostMapping(PathConstant.ORDER_CREATE)
     public ResponseEntity<OrderResponse> create(
             @RequestBody
             OrderRequest request
@@ -29,7 +29,7 @@ public class OrderApiController {
                 .body(response);
     }
 
-    @GetMapping(PathConstant.FIND_ALL)
+    @GetMapping(PathConstant.ORDER_FIND_ALL)
     public ResponseEntity<List<OrderResponse>> findAll() {
         var responses = orderService.findAll();
 
