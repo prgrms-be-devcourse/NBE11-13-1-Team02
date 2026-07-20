@@ -1,6 +1,8 @@
 package com.example.ilovecoffee.domain.entity.menu;
 
 import com.example.ilovecoffee.domain.enums.MenuStatus;
+import com.example.ilovecoffee.exception.InsufficientStockException;
+import com.example.ilovecoffee.exception.InvalidQuantityException;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -52,6 +54,7 @@ public class Menu {
 
     public void activate() {
         if(status == MenuStatus.ACTIVE) return;
+        if(stock <= 0) throw new InsufficientStockException();
         this.status = MenuStatus.ACTIVE;
         this.deletedAt = null;
     }
@@ -59,5 +62,33 @@ public class Menu {
     public void deactivate() {
         if(status != MenuStatus.ACTIVE) return;
         this.status = MenuStatus.INACTIVE;
+    }
+
+    public void decrease(int quantity) {
+        if(quantity < 0) {
+            throw new InvalidQuantityException();
+        }
+        if(stock < quantity) {
+            throw new InsufficientStockException();
+        }
+        stock -= quantity;
+        if(stock == 0) {
+            deactivate();
+        }
+    }
+
+    private void increase(int quantity) {
+        if(quantity <= 0) {
+            throw new InvalidQuantityException();
+        }
+        stock += quantity;
+    }
+
+    public void restoreStock(int quantity) {
+        this.increase(quantity);
+    }
+
+    public void replenishStock(int quantity) {
+        this.increase(quantity);
     }
 }

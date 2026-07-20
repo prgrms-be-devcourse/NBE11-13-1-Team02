@@ -17,5 +17,9 @@ public enum ShipmentStatus {
     RETURNING("반품 중"),
     RETURNED("반품 완료");
 
+    public boolean canCancel() {
+        return this == PENDING;
+    }
+
     private final String comment;
 }

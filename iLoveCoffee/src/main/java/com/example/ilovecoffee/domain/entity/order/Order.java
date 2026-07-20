@@ -2,6 +2,8 @@ package com.example.ilovecoffee.domain.entity.order;
 
 import com.example.ilovecoffee.domain.enums.OrderStatus;
 import com.example.ilovecoffee.domain.enums.ShipmentStatus;
+import com.example.ilovecoffee.exception.AlreadyCanceledOrderException;
+import com.example.ilovecoffee.exception.OrderDeletionNotAllowedException;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -72,6 +74,23 @@ public class Order {
         this.orderStatus = OrderStatus.COMPLETED;
         this.shipmentStatus = ShipmentStatus.DELIVERED;
         this.deliveredAt = LocalDateTime.now();
+    }
+
+    public void cancel() {
+        validateCancelable();
+        this.orderStatus = OrderStatus.CANCELED;
+    }
+
+    private void validateCancelable() {
+        if(this.orderStatus == OrderStatus.CANCELED)
+            throw new AlreadyCanceledOrderException();
+        if(!this.shipmentStatus.canCancel())
+            throw new OrderDeletionNotAllowedException();
+    }
+
+    public void validateDeletable() {
+        if(!orderStatus.canDelete())
+            throw new OrderDeletionNotAllowedException();
     }
 
     public static Order create(

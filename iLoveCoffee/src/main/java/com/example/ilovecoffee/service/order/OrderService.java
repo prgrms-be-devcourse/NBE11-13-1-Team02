@@ -1,15 +1,11 @@
 package com.example.ilovecoffee.service.order;
 
-import com.example.ilovecoffee.domain.entity.menu.Menu;
 import com.example.ilovecoffee.domain.entity.order.Order;
 import com.example.ilovecoffee.domain.entity.order.OrderItem;
 import com.example.ilovecoffee.domain.enums.OrderStatus;
-import com.example.ilovecoffee.domain.repository.MenuRepository;
 import com.example.ilovecoffee.domain.repository.OrderRepository;
-import com.example.ilovecoffee.dto.order.request.OrderItemRequest;
 import com.example.ilovecoffee.dto.order.request.OrderRequest;
 import com.example.ilovecoffee.dto.order.response.OrderResponse;
-import com.example.ilovecoffee.exception.MenuNotFoundException;
 import com.example.ilovecoffee.exception.OrderNotFoundException;
 import com.example.ilovecoffee.mapper.OrderMapper;
 import lombok.RequiredArgsConstructor;
@@ -24,12 +20,15 @@ import java.util.List;
 public class OrderService {
     private final OrderMapper orderMapper;
     private final OrderRepository orderRepository;
-    private final MenuRepository menuRepository;
+    private final InventoryService inventoryService;
 
     @Transactional
     public OrderResponse create(OrderRequest request) {
         List<OrderItem> orderItems = request.items().stream()
-                .map(this::createOrderItem)
+                .map(item -> inventoryService.decrease(
+                        item.menuId(),
+                        item.quantity()
+                ))
                 .toList();
         Order order = Order.create(
                 request.email(),
@@ -37,9 +36,9 @@ public class OrderService {
                 request.address(),
                 orderItems
         );
+
         order.suspend();
         Order saved = orderRepository.save(order);
-
         return orderMapper.toOrderResponse(saved);
     }
 
@@ -58,8 +57,14 @@ public class OrderService {
     }
 
     @Transactional
-    public void preparePendingOrders() {
+    public void confirmPendingOrders() {
         orderRepository.findAllByOrderStatus(OrderStatus.PENDING)
+                .forEach(Order::confirm);
+    }
+
+    @Transactional
+    public void prepareConfirmingOrders() {
+        orderRepository.findAllByOrderStatus(OrderStatus.CONFIRMED)
                 .forEach(Order::prepare);
     }
 
@@ -76,21 +81,35 @@ public class OrderService {
     }
 
     @Transactional
+    public void cancelOrder(Long id) {
+        Order order = findOrder(id);
+        order.cancel();
+
+        order.getItems().forEach(item ->
+                inventoryService.restore(
+                        item.getMenuId(),
+                        item.getQuantity()
+                )
+        );
+    }
+
+
+    @Transactional
     public void deleteById(Long id) {
-        Order order = orderRepository.findById(id)
-                .orElseThrow(OrderNotFoundException::new);
+        Order order = findOrder(id);
+        order.validateDeletable();
         orderRepository.delete(order);
     }
 
     @Transactional
     public void deleteAllByEmail(String email) {
         var orders = orderRepository.findAllByEmail(email);
+        orders.forEach(Order::validateDeletable);
         orderRepository.deleteAll(orders);
     }
 
-    private OrderItem createOrderItem(OrderItemRequest request) {
-        Menu menu = menuRepository.findById(request.menuId()).orElseThrow(MenuNotFoundException::new);
-
-        return OrderItem.from(menu, request.quantity());
+    private Order findOrder(Long id) {
+        return orderRepository.findById(id)
+                .orElseThrow(OrderNotFoundException::new);
     }
 }
