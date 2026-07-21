@@ -11,6 +11,7 @@ public class SpaController {
             "/menus",
             "/orders",
             "/admin/menus",
+            "/admin/menus/recents",
             "/admin/orders",
             "/admin/menus/deleted"
     })

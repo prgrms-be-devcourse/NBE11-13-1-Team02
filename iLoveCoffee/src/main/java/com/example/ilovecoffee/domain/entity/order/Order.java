@@ -5,6 +5,8 @@ import com.example.ilovecoffee.domain.enums.ShipmentStatus;
 import com.example.ilovecoffee.exception.AlreadyCanceledOrderException;
 import com.example.ilovecoffee.exception.OrderDeletionNotAllowedException;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

@@ -2,10 +2,12 @@ package com.example.ilovecoffee.exception;
 
 import com.example.ilovecoffee.dto.error.ErrorResponse;
 import com.example.ilovecoffee.service.slack.SlackNotificationService;
+import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -32,6 +34,40 @@ public class GlobalExceptionHandler {
         slackNotificationService.sendSlackAlert(response);
         return ResponseEntity
                 .status(e.getStatus())
+                .body(response);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> validationExceptionHandler(
+            MethodArgumentNotValidException e
+    ) {
+        log.warn("Validation failed: {}", e.getMessage());
+        var response = ErrorResponse.of(
+                HttpStatus.BAD_REQUEST.value(),
+                "VALIDATION_ERROR",
+                "입력값이 올바르지 않습니다.",
+                LocalDateTime.now()
+        );
+        slackNotificationService.sendSlackAlert(response);
+        return ResponseEntity
+                .badRequest()
+                .body(response);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ErrorResponse> constraintViolationHandler(
+            ConstraintViolationException e
+    ) {
+        log.warn("Validation failed: {}", e.getMessage());
+        var response = ErrorResponse.of(
+                HttpStatus.BAD_REQUEST.value(),
+                "VALIDATION_ERROR",
+                "입력값이 올바르지 않습니다.",
+                LocalDateTime.now()
+        );
+        slackNotificationService.sendSlackAlert(response);
+        return ResponseEntity
+                .badRequest()
                 .body(response);
     }
 
