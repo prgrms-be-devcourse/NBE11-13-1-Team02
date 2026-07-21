@@ -1,9 +1,19 @@
-HELP.md
-.gradle
+### Gradle ###
+.gradle/
 build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+
+### Local files ###
+HELP.md
+.DS_Store
+logs/
+**/logs/
+*.log
+
+### Local configuration ###
+src/main/resources/application-local.yaml
 
 ### STS ###
 .apt_generated
@@ -18,7 +28,7 @@ bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
-.idea
+.idea/
 *.iws
 *.iml
 *.ipr
@@ -35,11 +45,3 @@ out/
 
 ### VS Code ###
 .vscode/
-
-logs/
-
-**/logs/
-
-*.log
-
-src/main/resources/application-local.yaml
