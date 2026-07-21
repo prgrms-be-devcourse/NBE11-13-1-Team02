@@ -1,10 +1,15 @@
 package com.example.ilovecoffee.service.order;
 
+import com.example.ilovecoffee.domain.entity.menu.Menu;
 import com.example.ilovecoffee.domain.entity.order.Order;
 import com.example.ilovecoffee.domain.entity.order.OrderItem;
+import com.example.ilovecoffee.domain.enums.OrderStatus;
+import com.example.ilovecoffee.domain.repository.MenuRepository;
 import com.example.ilovecoffee.domain.repository.OrderRepository;
+import com.example.ilovecoffee.dto.order.request.OrderItemRequest;
 import com.example.ilovecoffee.dto.order.request.OrderRequest;
 import com.example.ilovecoffee.dto.order.response.OrderResponse;
+import com.example.ilovecoffee.exception.MenuNotFoundException;
 import com.example.ilovecoffee.exception.OrderNotFoundException;
 import com.example.ilovecoffee.mapper.OrderMapper;
 import com.example.ilovecoffee.service.component.InventoryManager;
@@ -22,24 +27,30 @@ public class OrderService {
     private final OrderMapper orderMapper;
     private final OrderRepository orderRepository;
     private final InventoryManager inventoryManager;
+    private final MenuRepository menuRepository;
 
     @Transactional
     public OrderResponse create(OrderRequest request) {
-        List<OrderItem> orderItems = request.items().stream()
-                .map(item -> inventoryManager.decrease(
-                        item.menuId(),
-                        item.quantity()
-                ))
-                .toList();
+        Order order = findPendingOrderOrCreate(request);
 
-        Order order = Order.create(
-                request.email(),
-                request.postNumber(),
-                request.address(),
-                orderItems
-        );
+        for (OrderItemRequest itemRequest : request.items()) {
+            Menu menu = findMenu(itemRequest.menuId());
 
-        order.suspend();
+            inventoryManager.decrease(
+                    menu.getId(),
+                    itemRequest.quantity()
+            );
+
+            OrderItem orderItem = OrderItem.of(
+                    menu.getId(),
+                    menu.getVersion(),
+                    menu.getName(),
+                    menu.getPrice(),
+                    itemRequest.quantity()
+            );
+
+            order.addItem(orderItem);
+        }
 
         Order savedOrder = orderRepository.save(order);
 
@@ -86,6 +97,24 @@ public class OrderService {
 
         orders.forEach(Order::validateDeletable);
         orderRepository.deleteAll(orders);
+    }
+
+    private Order findPendingOrderOrCreate(OrderRequest request) {
+        return orderRepository
+                .findFirstByEmailAndOrderStatusOrderByIdDesc(
+                        request.email(),
+                        OrderStatus.PENDING
+                )
+                .orElseGet(() -> Order.create(
+                        request.email(),
+                        request.postNumber(),
+                        request.address()
+                ));
+    }
+
+    private Menu findMenu(Long menuId) {
+        return menuRepository.findById(menuId)
+                .orElseThrow(MenuNotFoundException::new);
     }
 
     private Order findOrder(Long id) {

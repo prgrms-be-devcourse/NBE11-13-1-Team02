@@ -33,6 +33,7 @@ public class OrderMapper {
                 .items(items)
                 .orderStatus(order.getOrderStatus())
                 .shipmentStatus(order.getShipmentStatus())
+                .totalPrice(order.getTotalPrice())
                 .build();
     }
 

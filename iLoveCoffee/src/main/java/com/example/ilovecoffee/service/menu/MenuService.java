@@ -12,6 +12,7 @@ import com.example.ilovecoffee.dto.menu.response.MenuResponse;
 import com.example.ilovecoffee.exception.MenuNotFoundException;
 import com.example.ilovecoffee.exception.MenuNotInTrashException;
 import com.example.ilovecoffee.mapper.MenuMapper;
+import com.example.ilovecoffee.service.component.InventoryManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ public class MenuService {
     private final MenuMapper menuMapper;
     private final MenuRepository menuRepository;
     private final MenuVersionRepository menuVersionRepository;
+    private final InventoryManager inventoryManager;
 
     // 고객용
     public List<MenuResponse> findAllForCustomer() {
@@ -35,9 +37,8 @@ public class MenuService {
                 .map(menuMapper::toMenuResponse)
                 .toList();
     }
-
     public List<AdminMenuResponse> findAllForAdmin() {
-        return menuRepository.findAll().stream()
+        return menuRepository.findAllByStatusNot(MenuStatus.DELETED).stream()
                 .map(menuMapper::toAdminMenuResponse)
                 .toList();
     }
@@ -69,6 +70,12 @@ public class MenuService {
         Menu menu = findByIdOrThrow(id);
         archive(menu);
         menuMapper.updateEntity(menu, request);
+        int stock = request.stock() - menu.getStock();
+        if(stock > 0) {
+            inventoryManager.replenish(menu.getId(), stock);
+        } else if(stock < 0) {
+            inventoryManager.decrease(menu.getId(), -stock);
+        }
         log.info("메뉴 수정됨: id={}, name={}", id, menu.getName());
         return menuMapper.toAdminMenuResponse(menu);
     }

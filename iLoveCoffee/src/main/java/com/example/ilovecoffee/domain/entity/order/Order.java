@@ -33,17 +33,34 @@ public class Order {
     private String address;
 
     @Enumerated(EnumType.STRING)
-    private ShipmentStatus shipmentStatus;
+    @Builder.Default
+    private ShipmentStatus shipmentStatus = ShipmentStatus.PENDING;
 
     @Enumerated(EnumType.STRING)
-    private OrderStatus orderStatus;
+    @Builder.Default
+    private OrderStatus orderStatus = OrderStatus.PENDING;
 
     private long totalPrice;
-
     @Builder.Default
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "order_id")
+    @OneToMany(
+            mappedBy = "order",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
     private List<OrderItem> items = new ArrayList<>();
+    public void addItem(OrderItem newItem) {
+        OrderItem existingItem = items.stream()
+                .filter(item -> item.isSameMenu(newItem.getMenuId()))
+                .findFirst()
+                .orElse(null);
+        if (existingItem != null) {
+            existingItem.increaseQuantity(newItem.getQuantity());
+        } else {
+            items.add(newItem);
+            newItem.assignOrder(this);
+        }
+        totalPrice += newItem.calculateSubtotal();
+    }
 
     private LocalDateTime orderAt = null;
     private LocalDateTime dispatchAt = null;
@@ -97,20 +114,16 @@ public class Order {
     public static Order create(
             String email,
             String postNumber,
-            String address,
-            List<OrderItem> items
+            String address
     ) {
-        long totalPrice = items.stream()
-                .mapToLong(item -> item.getPrice() * item.getQuantity())
-                .sum();
-
         return Order.builder()
                 .email(email)
                 .postNumber(postNumber)
                 .address(address)
-                .items(new ArrayList<>(items))
-                .totalPrice(totalPrice)
+                .orderStatus(OrderStatus.PENDING)
+                .shipmentStatus(ShipmentStatus.PENDING)
                 .orderAt(LocalDateTime.now())
+                .totalPrice(0L)
                 .build();
     }
 
