@@ -4926,3 +4926,277 @@ insert into orders (address,delivered_at,dispatch_at,email,order_at,order_status
 2026-07-21 15:03:25.121 INFO  ionShutdownHook j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
 2026-07-21 15:03:25.122 INFO  ionShutdownHook com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
 2026-07-21 15:03:25.133 INFO  ionShutdownHook com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-07-21 15:06:24.192 INFO             main c.e.i.ILoveCoffeeApplication             : Starting ILoveCoffeeApplication using Java 25.0.3 with PID 63782 (/Users/ijeong-gyun/Desktop/iLoveCoffee/build/classes/java/main started by ijeong-gyun in /Users/ijeong-gyun/Desktop/iLoveCoffee)
+2026-07-21 15:06:24.193 INFO             main c.e.i.ILoveCoffeeApplication             : No active profile set, falling back to 1 default profile: "default"
+2026-07-21 15:06:24.672 INFO             main .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-07-21 15:06:24.759 INFO             main .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 82 ms. Found 3 JPA repository interfaces.
+2026-07-21 15:06:25.020 INFO             main o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-07-21 15:06:25.028 INFO             main o.a.catalina.core.StandardService        : Starting service [Tomcat]
+2026-07-21 15:06:25.029 INFO             main o.a.catalina.core.StandardEngine         : Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-07-21 15:06:25.054 INFO             main b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 837 ms
+2026-07-21 15:06:25.152 INFO             main org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-07-21 15:06:25.211 INFO             main org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-07-21 15:06:25.548 INFO             main o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-07-21 15:06:25.571 INFO             main com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-07-21 15:06:25.629 INFO             main com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:tcp://localhost:9092/mem:testdb user=SA
+2026-07-21 15:06:25.630 INFO             main com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-07-21 15:06:25.650 WARN             main org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-07-21 15:06:25.666 INFO             main o.hibernate.orm.connections.pooling      : HHH10001005: Database info:
+	Database JDBC URL [jdbc:h2:tcp://localhost:9092/mem:testdb]
+	Database driver: H2 JDBC Driver
+	Database dialect: H2Dialect
+	Database version: 2.2.224
+	Default catalog/schema: TESTDB/PUBLIC
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: 100
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-07-21 15:06:26.311 INFO             main org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-07-21 15:06:26.315 INFO             main j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-07-21 15:06:26.360 INFO             main o.s.d.j.r.q.QueryEnhancerFactories       : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-07-21 15:06:26.697 WARN             main JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-07-21 15:06:26.707 INFO             main o.s.b.w.a.WelcomePageHandlerMapping      : Adding welcome page: class path resource [static/index.html]
+2026-07-21 15:06:26.951 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : Executing SQL script from class path resource [menu.sql]
+2026-07-21 15:06:26.965 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : 0 returned as update count for SQL: CREATE TABLE menu ( id BIGINT AUTO_INCREMENT PRIMARY KEY, version BIGINT NOT NULL DEFAULT 1, name VARCHAR(50) NOT NULL, description VARCHAR(200), price BIGINT NOT NULL, stock INT NOT NULL, status VARCHAR(20) NOT NULL, created_at DATETIME, updated_at DATETIME, deleted_at DATETIME )
+2026-07-21 15:06:26.966 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : Executed SQL script from class path resource [menu.sql] in 15 ms.
+2026-07-21 15:06:26.966 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : Executing SQL script from class path resource [menu_version.sql]
+2026-07-21 15:06:26.968 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : 0 returned as update count for SQL: CREATE TABLE menu_version ( id BIGINT AUTO_INCREMENT PRIMARY KEY, menu_id BIGINT NOT NULL, version BIGINT NOT NULL, name VARCHAR(100) NOT NULL, description VARCHAR(1000), price BIGINT NOT NULL, stock INT NOT NULL, status VARCHAR(20) NOT NULL, archived_at DATETIME NOT NULL )
+2026-07-21 15:06:26.968 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : Executed SQL script from class path resource [menu_version.sql] in 2 ms.
+2026-07-21 15:06:26.968 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : Executing SQL script from class path resource [order.sql]
+2026-07-21 15:06:26.969 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : 0 returned as update count for SQL: CREATE TABLE orders ( id BIGINT AUTO_INCREMENT PRIMARY KEY, email VARCHAR(255) NOT NULL, post_number VARCHAR(20) NOT NULL, address VARCHAR(255) NOT NULL, shipment_status VARCHAR(20) NOT NULL, order_status VARCHAR(20) NOT NULL, total_price BIGINT NOT NULL, order_at DATETIME, dispatch_at DATETIME, delivered_at DATETIME )
+2026-07-21 15:06:26.970 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : Executed SQL script from class path resource [order.sql] in 2 ms.
+2026-07-21 15:06:26.970 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : Executing SQL script from class path resource [order_item.sql]
+2026-07-21 15:06:26.972 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : 0 returned as update count for SQL: CREATE TABLE order_item ( id BIGINT AUTO_INCREMENT PRIMARY KEY, order_id BIGINT NOT NULL, menu_id BIGINT NOT NULL, menu_version BIGINT NOT NULL, name VARCHAR(100) NOT NULL, price BIGINT NOT NULL, quantity INT NOT NULL, CONSTRAINT fk_order_item_order FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE )
+2026-07-21 15:06:26.973 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : Executed SQL script from class path resource [order_item.sql] in 3 ms.
+2026-07-21 15:06:27.007 INFO             main o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2026-07-21 15:06:27.011 INFO             main c.e.i.ILoveCoffeeApplication             : Started ILoveCoffeeApplication in 3.063 seconds (process running for 3.436)
+2026-07-21 15:06:27.013 WARN             main o.s.c.events.SpringDocAppInitializer     : SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-07-21 15:06:27.013 WARN             main o.s.c.events.SpringDocAppInitializer     : SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+2026-07-21 15:06:32.056 INFO  nio-8080-exec-1 o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-07-21 15:06:32.056 INFO  nio-8080-exec-1 o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-07-21 15:06:32.057 INFO  nio-8080-exec-1 o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-07-21 15:06:32.348 TRACE nio-8080-exec-4 org.hibernate.orm.jdbc.bind              : binding parameter (1:ENUM) <- [DELETED]
+2026-07-21 15:06:32.457 ERROR nio-8080-exec-5 c.e.i.e.GlobalExceptionHandler           : Unexpected Error message=No static resource favicon.ico for request '/favicon.ico'.
+2026-07-21 15:07:33.206 ERROR nio-8080-exec-8 c.e.i.e.GlobalExceptionHandler           : Unexpected Error message=No static resource favicon.ico for request '/favicon.ico'.
+2026-07-21 15:07:33.214 TRACE nio-8080-exec-7 org.hibernate.orm.jdbc.bind              : binding parameter (1:ENUM) <- [DELETED]
+2026-07-21 15:07:37.814 ERROR io-8080-exec-10 c.e.i.e.GlobalExceptionHandler           : Unexpected Error message=No static resource favicon.ico for request '/favicon.ico'.
+2026-07-21 15:07:37.833 TRACE nio-8080-exec-9 org.hibernate.orm.jdbc.bind              : binding parameter (1:ENUM) <- [DELETED]
+2026-07-21 15:07:38.545 ERROR nio-8080-exec-3 c.e.i.e.GlobalExceptionHandler           : Unexpected Error message=No static resource favicon.ico for request '/favicon.ico'.
+2026-07-21 15:07:38.548 TRACE nio-8080-exec-1 org.hibernate.orm.jdbc.bind              : binding parameter (1:ENUM) <- [DELETED]
+2026-07-21 15:07:38.971 ERROR nio-8080-exec-2 c.e.i.e.GlobalExceptionHandler           : Unexpected Error message=No static resource favicon.ico for request '/favicon.ico'.
+2026-07-21 15:07:47.508 TRACE nio-8080-exec-4 org.hibernate.orm.jdbc.bind              : binding parameter (1:TIMESTAMP) <- [2026-07-21T15:07:47.484836]
+2026-07-21 15:07:47.509 TRACE nio-8080-exec-4 org.hibernate.orm.jdbc.bind              : binding parameter (2:TIMESTAMP) <- [null]
+2026-07-21 15:07:47.510 TRACE nio-8080-exec-4 org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [아메리카노]
+2026-07-21 15:07:47.510 TRACE nio-8080-exec-4 org.hibernate.orm.jdbc.bind              : binding parameter (4:VARCHAR) <- [아메리카노]
+2026-07-21 15:07:47.510 TRACE nio-8080-exec-4 org.hibernate.orm.jdbc.bind              : binding parameter (5:BIGINT) <- [10000]
+2026-07-21 15:07:47.510 TRACE nio-8080-exec-4 org.hibernate.orm.jdbc.bind              : binding parameter (6:ENUM) <- [ACTIVE]
+2026-07-21 15:07:47.510 TRACE nio-8080-exec-4 org.hibernate.orm.jdbc.bind              : binding parameter (7:INTEGER) <- [50]
+2026-07-21 15:07:47.510 TRACE nio-8080-exec-4 org.hibernate.orm.jdbc.bind              : binding parameter (8:TIMESTAMP) <- [null]
+2026-07-21 15:07:47.510 TRACE nio-8080-exec-4 org.hibernate.orm.jdbc.bind              : binding parameter (9:BIGINT) <- [1]
+2026-07-21 15:07:47.524 INFO  nio-8080-exec-4 c.e.i.service.menu.MenuService           : 메뉴 생성됨: id=1, name=아메리카노
+2026-07-21 15:07:47.553 ERROR nio-8080-exec-6 c.e.i.e.GlobalExceptionHandler           : Unexpected Error message=No static resource favicon.ico for request '/favicon.ico'.
+2026-07-21 15:07:47.560 TRACE nio-8080-exec-5 org.hibernate.orm.jdbc.bind              : binding parameter (1:ENUM) <- [DELETED]
+2026-07-21 15:09:54.157 INFO  ionShutdownHook o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-07-21 15:09:54.167 INFO  tomcat-shutdown o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-07-21 15:09:54.173 INFO  ionShutdownHook j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-07-21 15:09:54.177 INFO  ionShutdownHook com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-07-21 15:09:54.188 INFO  ionShutdownHook com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-07-21 15:09:56.040 INFO             main c.e.i.ILoveCoffeeApplication             : Starting ILoveCoffeeApplication using Java 25.0.3 with PID 63947 (/Users/ijeong-gyun/Desktop/iLoveCoffee/build/classes/java/main started by ijeong-gyun in /Users/ijeong-gyun/Desktop/iLoveCoffee)
+2026-07-21 15:09:56.042 INFO             main c.e.i.ILoveCoffeeApplication             : No active profile set, falling back to 1 default profile: "default"
+2026-07-21 15:09:56.547 INFO             main .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-07-21 15:09:56.636 INFO             main .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 82 ms. Found 3 JPA repository interfaces.
+2026-07-21 15:09:56.904 INFO             main o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-07-21 15:09:56.912 INFO             main o.a.catalina.core.StandardService        : Starting service [Tomcat]
+2026-07-21 15:09:56.912 INFO             main o.a.catalina.core.StandardEngine         : Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-07-21 15:09:56.938 INFO             main b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 871 ms
+2026-07-21 15:09:57.032 INFO             main org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-07-21 15:09:57.068 INFO             main org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-07-21 15:09:57.351 INFO             main o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-07-21 15:09:57.372 INFO             main com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-07-21 15:09:57.435 INFO             main com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:tcp://localhost:9092/mem:testdb user=SA
+2026-07-21 15:09:57.436 INFO             main com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-07-21 15:09:57.455 WARN             main org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-07-21 15:09:57.473 INFO             main o.hibernate.orm.connections.pooling      : HHH10001005: Database info:
+	Database JDBC URL [jdbc:h2:tcp://localhost:9092/mem:testdb]
+	Database driver: H2 JDBC Driver
+	Database dialect: H2Dialect
+	Database version: 2.2.224
+	Default catalog/schema: TESTDB/PUBLIC
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: 100
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-07-21 15:09:58.080 INFO             main org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-07-21 15:09:58.084 INFO             main j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-07-21 15:09:58.127 INFO             main o.s.d.j.r.q.QueryEnhancerFactories       : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-07-21 15:09:58.338 WARN             main JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-07-21 15:09:58.349 INFO             main o.s.b.w.a.WelcomePageHandlerMapping      : Adding welcome page: class path resource [static/index.html]
+2026-07-21 15:09:58.597 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : Executing SQL script from class path resource [menu.sql]
+2026-07-21 15:09:58.603 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : 0 returned as update count for SQL: CREATE TABLE menu ( id BIGINT AUTO_INCREMENT PRIMARY KEY, version BIGINT NOT NULL DEFAULT 1, name VARCHAR(50) NOT NULL, description VARCHAR(200), price BIGINT NOT NULL, stock INT NOT NULL, status VARCHAR(20) NOT NULL, created_at DATETIME, updated_at DATETIME, deleted_at DATETIME )
+2026-07-21 15:09:58.603 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : Executed SQL script from class path resource [menu.sql] in 6 ms.
+2026-07-21 15:09:58.603 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : Executing SQL script from class path resource [menu_version.sql]
+2026-07-21 15:09:58.605 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : 0 returned as update count for SQL: CREATE TABLE menu_version ( id BIGINT AUTO_INCREMENT PRIMARY KEY, menu_id BIGINT NOT NULL, version BIGINT NOT NULL, name VARCHAR(100) NOT NULL, description VARCHAR(1000), price BIGINT NOT NULL, stock INT NOT NULL, status VARCHAR(20) NOT NULL, archived_at DATETIME NOT NULL )
+2026-07-21 15:09:58.605 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : Executed SQL script from class path resource [menu_version.sql] in 2 ms.
+2026-07-21 15:09:58.605 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : Executing SQL script from class path resource [order.sql]
+2026-07-21 15:09:58.607 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : 0 returned as update count for SQL: CREATE TABLE orders ( id BIGINT AUTO_INCREMENT PRIMARY KEY, email VARCHAR(255) NOT NULL, post_number VARCHAR(20) NOT NULL, address VARCHAR(255) NOT NULL, shipment_status VARCHAR(20) NOT NULL, order_status VARCHAR(20) NOT NULL, total_price BIGINT NOT NULL, order_at DATETIME, dispatch_at DATETIME, delivered_at DATETIME )
+2026-07-21 15:09:58.607 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : Executed SQL script from class path resource [order.sql] in 2 ms.
+2026-07-21 15:09:58.607 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : Executing SQL script from class path resource [order_item.sql]
+2026-07-21 15:09:58.611 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : 0 returned as update count for SQL: CREATE TABLE order_item ( id BIGINT AUTO_INCREMENT PRIMARY KEY, order_id BIGINT NOT NULL, menu_id BIGINT NOT NULL, menu_version BIGINT NOT NULL, name VARCHAR(100) NOT NULL, price BIGINT NOT NULL, quantity INT NOT NULL, CONSTRAINT fk_order_item_order FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE )
+2026-07-21 15:09:58.612 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : Executed SQL script from class path resource [order_item.sql] in 5 ms.
+2026-07-21 15:09:58.645 INFO             main o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2026-07-21 15:09:58.650 INFO             main c.e.i.ILoveCoffeeApplication             : Started ILoveCoffeeApplication in 2.853 seconds (process running for 3.46)
+2026-07-21 15:09:58.651 WARN             main o.s.c.events.SpringDocAppInitializer     : SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-07-21 15:09:58.651 WARN             main o.s.c.events.SpringDocAppInitializer     : SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+2026-07-21 15:09:59.577 INFO  nio-8080-exec-1 o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-07-21 15:09:59.577 INFO  nio-8080-exec-1 o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-07-21 15:09:59.578 INFO  nio-8080-exec-1 o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-07-21 15:09:59.597 ERROR nio-8080-exec-1 c.e.i.e.GlobalExceptionHandler           : Unexpected Error message=No static resource admin/menus for request '/admin/menus'.
+2026-07-21 15:10:00.291 ERROR nio-8080-exec-2 c.e.i.e.GlobalExceptionHandler           : Unexpected Error message=No static resource favicon.ico for request '/favicon.ico'.
+2026-07-21 15:10:01.132 ERROR nio-8080-exec-3 c.e.i.e.GlobalExceptionHandler           : Unexpected Error message=No static resource admin/menus for request '/admin/menus'.
+2026-07-21 15:10:01.579 ERROR nio-8080-exec-4 c.e.i.e.GlobalExceptionHandler           : Unexpected Error message=No static resource favicon.ico for request '/favicon.ico'.
+2026-07-21 15:10:01.931 ERROR nio-8080-exec-5 c.e.i.e.GlobalExceptionHandler           : Unexpected Error message=No static resource admin/menus for request '/admin/menus'.
+2026-07-21 15:10:02.199 ERROR nio-8080-exec-6 c.e.i.e.GlobalExceptionHandler           : Unexpected Error message=No static resource favicon.ico for request '/favicon.ico'.
+2026-07-21 15:10:04.669 ERROR io-8080-exec-10 c.e.i.e.GlobalExceptionHandler           : Unexpected Error message=No static resource favicon.ico for request '/favicon.ico'.
+2026-07-21 15:10:04.901 TRACE nio-8080-exec-1 org.hibernate.orm.jdbc.bind              : binding parameter (1:ENUM) <- [DELETED]
+2026-07-21 15:10:04.908 ERROR nio-8080-exec-2 c.e.i.e.GlobalExceptionHandler           : Unexpected Error message=No static resource favicon.ico for request '/favicon.ico'.
+2026-07-21 15:10:22.483 ERROR nio-8080-exec-3 c.e.i.e.GlobalExceptionHandler           : Unexpected Error message=No static resource menus for request '/menus'.
+2026-07-21 15:10:22.869 ERROR nio-8080-exec-4 c.e.i.e.GlobalExceptionHandler           : Unexpected Error message=No static resource favicon.ico for request '/favicon.ico'.
+2026-07-21 15:10:23.794 ERROR nio-8080-exec-5 c.e.i.e.GlobalExceptionHandler           : Unexpected Error message=No static resource menus for request '/menus'.
+2026-07-21 15:10:24.055 ERROR nio-8080-exec-6 c.e.i.e.GlobalExceptionHandler           : Unexpected Error message=No static resource favicon.ico for request '/favicon.ico'.
+2026-07-21 15:10:26.942 INFO  ionShutdownHook o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-07-21 15:10:26.951 INFO  tomcat-shutdown o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-07-21 15:10:26.955 INFO  ionShutdownHook j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-07-21 15:10:26.957 INFO  ionShutdownHook com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-07-21 15:10:26.969 INFO  ionShutdownHook com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-07-21 15:10:28.394 INFO             main c.e.i.ILoveCoffeeApplication             : Starting ILoveCoffeeApplication using Java 25.0.3 with PID 63993 (/Users/ijeong-gyun/Desktop/iLoveCoffee/build/classes/java/main started by ijeong-gyun in /Users/ijeong-gyun/Desktop/iLoveCoffee)
+2026-07-21 15:10:28.395 INFO             main c.e.i.ILoveCoffeeApplication             : No active profile set, falling back to 1 default profile: "default"
+2026-07-21 15:10:28.833 INFO             main .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-07-21 15:10:28.911 INFO             main .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 73 ms. Found 3 JPA repository interfaces.
+2026-07-21 15:10:29.145 INFO             main o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-07-21 15:10:29.153 INFO             main o.a.catalina.core.StandardService        : Starting service [Tomcat]
+2026-07-21 15:10:29.153 INFO             main o.a.catalina.core.StandardEngine         : Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-07-21 15:10:29.177 INFO             main b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 762 ms
+2026-07-21 15:10:29.264 INFO             main org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-07-21 15:10:29.289 INFO             main org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-07-21 15:10:29.506 INFO             main o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-07-21 15:10:29.523 INFO             main com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-07-21 15:10:29.566 INFO             main com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:tcp://localhost:9092/mem:testdb user=SA
+2026-07-21 15:10:29.567 INFO             main com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-07-21 15:10:29.584 WARN             main org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-07-21 15:10:29.602 INFO             main o.hibernate.orm.connections.pooling      : HHH10001005: Database info:
+	Database JDBC URL [jdbc:h2:tcp://localhost:9092/mem:testdb]
+	Database driver: H2 JDBC Driver
+	Database dialect: H2Dialect
+	Database version: 2.2.224
+	Default catalog/schema: TESTDB/PUBLIC
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: 100
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-07-21 15:10:30.128 INFO             main org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-07-21 15:10:30.132 INFO             main j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-07-21 15:10:30.173 INFO             main o.s.d.j.r.q.QueryEnhancerFactories       : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-07-21 15:10:30.369 WARN             main JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-07-21 15:10:30.379 INFO             main o.s.b.w.a.WelcomePageHandlerMapping      : Adding welcome page: class path resource [static/index.html]
+2026-07-21 15:10:30.607 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : Executing SQL script from class path resource [menu.sql]
+2026-07-21 15:10:30.612 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : 0 returned as update count for SQL: CREATE TABLE menu ( id BIGINT AUTO_INCREMENT PRIMARY KEY, version BIGINT NOT NULL DEFAULT 1, name VARCHAR(50) NOT NULL, description VARCHAR(200), price BIGINT NOT NULL, stock INT NOT NULL, status VARCHAR(20) NOT NULL, created_at DATETIME, updated_at DATETIME, deleted_at DATETIME )
+2026-07-21 15:10:30.613 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : Executed SQL script from class path resource [menu.sql] in 5 ms.
+2026-07-21 15:10:30.613 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : Executing SQL script from class path resource [menu_version.sql]
+2026-07-21 15:10:30.615 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : 0 returned as update count for SQL: CREATE TABLE menu_version ( id BIGINT AUTO_INCREMENT PRIMARY KEY, menu_id BIGINT NOT NULL, version BIGINT NOT NULL, name VARCHAR(100) NOT NULL, description VARCHAR(1000), price BIGINT NOT NULL, stock INT NOT NULL, status VARCHAR(20) NOT NULL, archived_at DATETIME NOT NULL )
+2026-07-21 15:10:30.616 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : Executed SQL script from class path resource [menu_version.sql] in 3 ms.
+2026-07-21 15:10:30.616 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : Executing SQL script from class path resource [order.sql]
+2026-07-21 15:10:30.617 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : 0 returned as update count for SQL: CREATE TABLE orders ( id BIGINT AUTO_INCREMENT PRIMARY KEY, email VARCHAR(255) NOT NULL, post_number VARCHAR(20) NOT NULL, address VARCHAR(255) NOT NULL, shipment_status VARCHAR(20) NOT NULL, order_status VARCHAR(20) NOT NULL, total_price BIGINT NOT NULL, order_at DATETIME, dispatch_at DATETIME, delivered_at DATETIME )
+2026-07-21 15:10:30.617 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : Executed SQL script from class path resource [order.sql] in 1 ms.
+2026-07-21 15:10:30.617 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : Executing SQL script from class path resource [order_item.sql]
+2026-07-21 15:10:30.620 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : 0 returned as update count for SQL: CREATE TABLE order_item ( id BIGINT AUTO_INCREMENT PRIMARY KEY, order_id BIGINT NOT NULL, menu_id BIGINT NOT NULL, menu_version BIGINT NOT NULL, name VARCHAR(100) NOT NULL, price BIGINT NOT NULL, quantity INT NOT NULL, CONSTRAINT fk_order_item_order FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE )
+2026-07-21 15:10:30.620 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : Executed SQL script from class path resource [order_item.sql] in 3 ms.
+2026-07-21 15:10:30.653 INFO             main o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2026-07-21 15:10:30.658 INFO             main c.e.i.ILoveCoffeeApplication             : Started ILoveCoffeeApplication in 2.475 seconds (process running for 2.795)
+2026-07-21 15:10:30.659 WARN             main o.s.c.events.SpringDocAppInitializer     : SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-07-21 15:10:30.660 WARN             main o.s.c.events.SpringDocAppInitializer     : SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+2026-07-21 15:10:31.928 INFO  nio-8080-exec-1 o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-07-21 15:10:31.928 INFO  nio-8080-exec-1 o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-07-21 15:10:31.929 INFO  nio-8080-exec-1 o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-07-21 15:10:31.947 ERROR nio-8080-exec-1 c.e.i.e.GlobalExceptionHandler           : Unexpected Error message=No static resource menus for request '/menus'.
+2026-07-21 15:10:33.865 ERROR nio-8080-exec-3 c.e.i.e.GlobalExceptionHandler           : Unexpected Error message=No static resource menus for request '/menus'.
+2026-07-21 15:10:36.708 TRACE nio-8080-exec-8 org.hibernate.orm.jdbc.bind              : binding parameter (1:ENUM) <- [DELETED]
+2026-07-21 15:10:40.111 ERROR nio-8080-exec-9 c.e.i.e.GlobalExceptionHandler           : Unexpected Error message=No static resource menus for request '/menus'.
+2026-07-21 15:10:41.731 ERROR nio-8080-exec-1 c.e.i.e.GlobalExceptionHandler           : Unexpected Error message=No static resource menus for request '/menus'.
+2026-07-21 15:10:46.226 TRACE nio-8080-exec-7 org.hibernate.orm.jdbc.bind              : binding parameter (1:ENUM) <- [DELETED]
+2026-07-21 15:10:49.798 TRACE nio-8080-exec-6 org.hibernate.orm.jdbc.bind              : binding parameter (1:ENUM) <- [DELETED]
+2026-07-21 15:10:50.274 TRACE nio-8080-exec-8 org.hibernate.orm.jdbc.bind              : binding parameter (1:ENUM) <- [DELETED]
+2026-07-21 15:10:51.796 ERROR nio-8080-exec-9 c.e.i.e.GlobalExceptionHandler           : Unexpected Error message=No static resource menus for request '/menus'.
+2026-07-21 15:11:03.272 TRACE nio-8080-exec-5 org.hibernate.orm.jdbc.bind              : binding parameter (1:ENUM) <- [DELETED]
+2026-07-21 15:11:05.144 ERROR nio-8080-exec-4 c.e.i.e.GlobalExceptionHandler           : Unexpected Error message=No static resource menus for request '/menus'.
+2026-07-21 15:12:59.247 INFO  ionShutdownHook o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-07-21 15:12:59.263 INFO  tomcat-shutdown o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-07-21 15:12:59.271 INFO  ionShutdownHook j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-07-21 15:12:59.275 INFO  ionShutdownHook com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-07-21 15:12:59.294 INFO  ionShutdownHook com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-07-21 15:13:01.003 INFO             main c.e.i.ILoveCoffeeApplication             : Starting ILoveCoffeeApplication using Java 25.0.3 with PID 64091 (/Users/ijeong-gyun/Desktop/iLoveCoffee/build/classes/java/main started by ijeong-gyun in /Users/ijeong-gyun/Desktop/iLoveCoffee)
+2026-07-21 15:13:01.005 INFO             main c.e.i.ILoveCoffeeApplication             : No active profile set, falling back to 1 default profile: "default"
+2026-07-21 15:13:01.441 INFO             main .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-07-21 15:13:01.511 INFO             main .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 65 ms. Found 3 JPA repository interfaces.
+2026-07-21 15:13:01.744 INFO             main o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8080 (http)
+2026-07-21 15:13:01.752 INFO             main o.a.catalina.core.StandardService        : Starting service [Tomcat]
+2026-07-21 15:13:01.753 INFO             main o.a.catalina.core.StandardEngine         : Starting Servlet engine: [Apache Tomcat/11.0.22]
+2026-07-21 15:13:01.777 INFO             main b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 751 ms
+2026-07-21 15:13:01.864 INFO             main org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-07-21 15:13:01.890 INFO             main org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.4.1.Final
+2026-07-21 15:13:02.103 INFO             main o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-07-21 15:13:02.120 INFO             main com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-07-21 15:13:02.166 INFO             main com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:tcp://localhost:9092/mem:testdb user=SA
+2026-07-21 15:13:02.167 INFO             main com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-07-21 15:13:02.181 WARN             main org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-07-21 15:13:02.196 INFO             main o.hibernate.orm.connections.pooling      : HHH10001005: Database info:
+	Database JDBC URL [jdbc:h2:tcp://localhost:9092/mem:testdb]
+	Database driver: H2 JDBC Driver
+	Database dialect: H2Dialect
+	Database version: 2.2.224
+	Default catalog/schema: TESTDB/PUBLIC
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: 100
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-07-21 15:13:02.731 INFO             main org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-07-21 15:13:02.735 INFO             main j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-07-21 15:13:02.775 INFO             main o.s.d.j.r.q.QueryEnhancerFactories       : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-07-21 15:13:02.970 WARN             main JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-07-21 15:13:02.980 INFO             main o.s.b.w.a.WelcomePageHandlerMapping      : Adding welcome page: class path resource [static/index.html]
+2026-07-21 15:13:03.209 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : Executing SQL script from class path resource [menu.sql]
+2026-07-21 15:13:03.214 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : 0 returned as update count for SQL: CREATE TABLE menu ( id BIGINT AUTO_INCREMENT PRIMARY KEY, version BIGINT NOT NULL DEFAULT 1, name VARCHAR(50) NOT NULL, description VARCHAR(200), price BIGINT NOT NULL, stock INT NOT NULL, status VARCHAR(20) NOT NULL, created_at DATETIME, updated_at DATETIME, deleted_at DATETIME )
+2026-07-21 15:13:03.214 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : Executed SQL script from class path resource [menu.sql] in 5 ms.
+2026-07-21 15:13:03.215 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : Executing SQL script from class path resource [menu_version.sql]
+2026-07-21 15:13:03.217 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : 0 returned as update count for SQL: CREATE TABLE menu_version ( id BIGINT AUTO_INCREMENT PRIMARY KEY, menu_id BIGINT NOT NULL, version BIGINT NOT NULL, name VARCHAR(100) NOT NULL, description VARCHAR(1000), price BIGINT NOT NULL, stock INT NOT NULL, status VARCHAR(20) NOT NULL, archived_at DATETIME NOT NULL )
+2026-07-21 15:13:03.217 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : Executed SQL script from class path resource [menu_version.sql] in 2 ms.
+2026-07-21 15:13:03.218 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : Executing SQL script from class path resource [order.sql]
+2026-07-21 15:13:03.220 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : 0 returned as update count for SQL: CREATE TABLE orders ( id BIGINT AUTO_INCREMENT PRIMARY KEY, email VARCHAR(255) NOT NULL, post_number VARCHAR(20) NOT NULL, address VARCHAR(255) NOT NULL, shipment_status VARCHAR(20) NOT NULL, order_status VARCHAR(20) NOT NULL, total_price BIGINT NOT NULL, order_at DATETIME, dispatch_at DATETIME, delivered_at DATETIME )
+2026-07-21 15:13:03.220 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : Executed SQL script from class path resource [order.sql] in 2 ms.
+2026-07-21 15:13:03.220 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : Executing SQL script from class path resource [order_item.sql]
+2026-07-21 15:13:03.222 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : 0 returned as update count for SQL: CREATE TABLE order_item ( id BIGINT AUTO_INCREMENT PRIMARY KEY, order_id BIGINT NOT NULL, menu_id BIGINT NOT NULL, menu_version BIGINT NOT NULL, name VARCHAR(100) NOT NULL, price BIGINT NOT NULL, quantity INT NOT NULL, CONSTRAINT fk_order_item_order FOREIGN KEY (order_id) REFERENCES orders(id) ON DELETE CASCADE )
+2026-07-21 15:13:03.222 DEBUG            main o.s.jdbc.datasource.init.ScriptUtils     : Executed SQL script from class path resource [order_item.sql] in 2 ms.
+2026-07-21 15:13:03.257 INFO             main o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8080 (http) with context path '/'
+2026-07-21 15:13:03.262 INFO             main c.e.i.ILoveCoffeeApplication             : Started ILoveCoffeeApplication in 2.47 seconds (process running for 2.772)
+2026-07-21 15:13:03.264 WARN             main o.s.c.events.SpringDocAppInitializer     : SpringDoc /v3/api-docs endpoint is enabled by default. To disable it in production, set the property 'springdoc.api-docs.enabled=false'
+2026-07-21 15:13:03.265 WARN             main o.s.c.events.SpringDocAppInitializer     : SpringDoc /swagger-ui.html endpoint is enabled by default. To disable it in production, set the property 'springdoc.swagger-ui.enabled=false'
+2026-07-21 15:13:40.378 INFO  nio-8080-exec-1 o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-07-21 15:13:40.378 INFO  nio-8080-exec-1 o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-07-21 15:13:40.379 INFO  nio-8080-exec-1 o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-07-21 15:13:40.670 TRACE nio-8080-exec-4 org.hibernate.orm.jdbc.bind              : binding parameter (1:ENUM) <- [DELETED]
+2026-07-21 15:13:41.421 TRACE nio-8080-exec-7 org.hibernate.orm.jdbc.bind              : binding parameter (1:ENUM) <- [DELETED]
+2026-07-21 15:13:43.670 TRACE nio-8080-exec-8 org.hibernate.orm.jdbc.bind              : binding parameter (1:ENUM) <- [DELETED]
+2026-07-21 15:13:44.164 TRACE nio-8080-exec-9 org.hibernate.orm.jdbc.bind              : binding parameter (1:ENUM) <- [DELETED]
+2026-07-21 15:13:45.076 TRACE io-8080-exec-10 org.hibernate.orm.jdbc.bind              : binding parameter (1:ENUM) <- [DELETED]
+2026-07-21 15:13:56.608 INFO  ionShutdownHook o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-07-21 15:13:56.616 INFO  tomcat-shutdown o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-07-21 15:13:56.620 INFO  ionShutdownHook j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-07-21 15:13:56.621 INFO  ionShutdownHook com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-07-21 15:13:56.635 INFO  ionShutdownHook com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
