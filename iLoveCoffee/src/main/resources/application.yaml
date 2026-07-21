@@ -30,10 +30,17 @@ spring:
 logging:
   level:
     root: INFO
-    # (테스트)실행된 스크립트 내부의 각 쿼리가 실행되는 과정 및 성공 여부
-    org.springframework.jdbc.datasource.init: DEBUG
-    # (테스트)SQL 쿼리를 실행할 때 물음표 파라미터 위치에 어떤 실제 데이터가 바인딩되는지 확인
-    org.hibernate.orm.jdbc.bind: TRACE
+    # 우리 프로젝트 로그
+    com.example.ilovecoffee: DEBUG
+
+    # Hibernate가 실행한 SQL
+    org.hibernate.SQL: OFF
+
+    # SQL 파라미터 바인딩 값
+    org.hibernate.orm.jdbc.bind: OFF
+
+    # schema.sql, data.sql 초기화 로그
+    org.springframework.jdbc.datasource.init: INFO
 
   pattern:
     # 콘솔용 로그 포맷
@@ -49,8 +56,8 @@ logging:
   logback:
     rollingpolicy:
       file-name-pattern: "logs/archived/%d{yyyy-MM-dd}.%i.log.gz"
-      max-file-size: 100MB
-      max-history: 30
+      max-file-size: 10MB
+      max-history: 300
       total-size-cap: 1GB
 
   slack:
@@ -60,3 +67,8 @@ logging:
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
+
+order:
+  batch:
+    cutoff-cron: "0 48 23 * * *"
+    advance-delay-ms: 10000
