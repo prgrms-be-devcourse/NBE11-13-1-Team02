@@ -13,11 +13,13 @@ import com.example.ilovecoffee.exception.MenuNotFoundException;
 import com.example.ilovecoffee.exception.MenuNotInTrashException;
 import com.example.ilovecoffee.mapper.MenuMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -93,6 +95,18 @@ public class MenuService {
     private void archive(Menu menu) {
         MenuVersion menuVersion = MenuVersion.from(menu);
         menuVersionRepository.save(menuVersion);
+    }
+
+    @Transactional
+    public void activate(Long id) {
+        findByIdOrThrow(id).activate();
+        log.info("메뉴 활성화됨: id={}", id);
+    }
+
+    @Transactional
+    public void deactivate(Long id) {
+        findByIdOrThrow(id).deactivate();
+        log.info("메뉴 비활성화됨: id={}", id);
     }
 
     private void validateDeletedMenu(Menu menu) {
