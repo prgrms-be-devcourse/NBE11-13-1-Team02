@@ -101,6 +101,18 @@ public class MenuService {
         menuVersionRepository.save(menuVersion);
     }
 
+    @Transactional
+    public void activate(Long id) {
+        findByIdOrThrow(id).activate();
+        log.info("메뉴 활성화됨: id={}", id);
+    }
+
+    @Transactional
+    public void deactivate(Long id) {
+        findByIdOrThrow(id).deactivate();
+        log.info("메뉴 비활성화됨: id={}", id);
+    }
+
     private void validateDeletedMenu(Menu menu) {
         if (menu.getStatus() != MenuStatus.DELETED) {
             throw new MenuNotInTrashException();
