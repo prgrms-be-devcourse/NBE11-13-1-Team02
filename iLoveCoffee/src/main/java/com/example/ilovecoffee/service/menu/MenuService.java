@@ -13,11 +13,13 @@ import com.example.ilovecoffee.exception.MenuNotFoundException;
 import com.example.ilovecoffee.exception.MenuNotInTrashException;
 import com.example.ilovecoffee.mapper.MenuMapper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -36,7 +38,10 @@ public class MenuService {
 
     public MenuResponse findByIdForCustomer(Long id) {
         Menu menu = menuRepository.findByIdAndStatusNot(id, MenuStatus.DELETED)
-                .orElseThrow(MenuNotFoundException::new);
+                .orElseThrow(() -> {
+                    log.debug("고객 조회 실패 - 존재하지 않거나 삭제된 메뉴: id={}", id);
+                    return new MenuNotFoundException();
+                });
 
         return menuMapper.toMenuResponse(menu);
     }
@@ -45,9 +50,9 @@ public class MenuService {
     @Transactional
     public AdminMenuResponse create(AdminMenuCreateRequest request) {
         Menu menu = menuMapper.toEntity(request);
-        Menu savedMenu = menuRepository.save(menu);
-
-        return menuMapper.toAdminMenuResponse(savedMenu);
+        Menu saved = menuRepository.save(menu);
+        log.info("메뉴 생성됨: id={}, name={}", saved.getId(), saved.getName());
+        return menuMapper.toAdminMenuResponse(saved);
     }
 
     @Transactional
@@ -58,20 +63,20 @@ public class MenuService {
         Menu menu = findByIdOrThrow(id);
         archive(menu);
         menuMapper.updateEntity(menu, request);
-        menu.updateStock(request.stock());
+        log.info("메뉴 수정됨: id={}, name={}", id, menu.getName());
         return menuMapper.toAdminMenuResponse(menu);
     }
 
     @Transactional
     public void softDelete(Long id) {
-        Menu menu = findByIdOrThrow(id);
-        menu.softDelete();
+        findByIdOrThrow(id).softDelete();
+        log.info("메뉴 소프트 삭제됨(휴지통행): id={}", id);
     }
 
     @Transactional
     public void restore(Long id) {
-        Menu menu = findByIdOrThrow(id);
-        menu.activate();
+        findByIdOrThrow(id).activate();
+        log.info("메뉴 복원됨: id={}", id);
     }
 
     @Transactional
@@ -82,6 +87,7 @@ public class MenuService {
 
         archive(menu);
         menuRepository.delete(menu);
+        log.info("메뉴 완전 삭제됨: id={}", id);
     }
 
     public List<AdminMenuResponse> findTrash() {
@@ -102,7 +108,9 @@ public class MenuService {
     }
 
     private Menu findByIdOrThrow(Long id) {
-        return menuRepository.findById(id)
-                .orElseThrow(MenuNotFoundException::new);
+        return menuRepository.findById(id).orElseThrow(() -> {
+            log.warn("존재하지 않는 메뉴: id={}", id);
+            return new MenuNotFoundException();
+        });
     }
 }
