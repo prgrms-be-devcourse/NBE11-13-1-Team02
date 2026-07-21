@@ -36,6 +36,12 @@ public class MenuService {
                 .toList();
     }
 
+    public List<AdminMenuResponse> findAllForAdmin() {
+        return menuRepository.findAll().stream()
+                .map(menuMapper::toAdminMenuResponse)
+                .toList();
+    }
+
     public MenuResponse findByIdForCustomer(Long id) {
         Menu menu = menuRepository.findByIdAndStatusNot(id, MenuStatus.DELETED)
                 .orElseThrow(() -> {
