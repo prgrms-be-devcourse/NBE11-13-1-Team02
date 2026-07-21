@@ -35,6 +35,7 @@ public class GlobalExceptionHandler {
                 .body(response);
     }
 
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> notDefinedExceptionHandler(Exception e) {
         log.error("Unexpected Error message={}", e.getMessage());
