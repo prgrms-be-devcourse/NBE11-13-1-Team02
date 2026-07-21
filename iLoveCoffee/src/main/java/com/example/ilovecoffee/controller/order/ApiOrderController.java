@@ -43,6 +43,15 @@ public class ApiOrderController {
         return ResponseEntity.ok(orderService.findByEmail(email));
     }
 
+    @GetMapping("/admin/{id}")
+    public ResponseEntity<OrderResponse> getOrderById(
+            @PathVariable Long id
+    ) {
+        return ResponseEntity.ok(
+                orderService.findById(id)
+        );
+    }
+
     @GetMapping("/admin")
     public ResponseEntity<List<OrderResponse>> getOrdersForAdmin(
             @RequestParam(required = false) String email

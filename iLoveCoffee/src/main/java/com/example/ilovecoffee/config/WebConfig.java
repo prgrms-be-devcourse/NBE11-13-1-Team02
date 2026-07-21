@@ -1,7 +1,9 @@
 package com.example.ilovecoffee.config;
 
+import com.example.ilovecoffee.constant.PathConstant;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
@@ -20,5 +22,15 @@ public class WebConfig implements WebMvcConfigurer {
                         "OPTIONS"
                 )
                 .allowedHeaders("*");
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        registry.addResourceHandler("/thumbnails/**")
+                .addResourceLocations(
+                        PathConstant.THUMBNAIL_DIRECTORY
+                                .toUri()
+                                .toString()
+                );
     }
 }

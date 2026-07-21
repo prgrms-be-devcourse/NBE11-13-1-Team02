@@ -18,6 +18,7 @@ public class MenuMapper {
                 .id(menu.getId())
                 .name(menu.getName())
                 .description(menu.getDescription())
+                .imageUrl(menu.getImageUrl())
                 .price(menu.getPrice())
                 .stock(menu.getStock())
                 .soldOut(isSoldOut(menu))
@@ -29,9 +30,11 @@ public class MenuMapper {
                 .id(menu.getId())
                 .name(menu.getName())
                 .description(menu.getDescription())
+                .imageUrl(menu.getImageUrl())
                 .price(menu.getPrice())
                 .stock(menu.getStock())
                 .status(menu.getStatus())
+                .statusComment(menu.getStatus().getComment())
                 .createdAt(menu.getCreatedAt())
                 .updatedAt(menu.getUpdatedAt())
                 .deletedAt(menu.getDeletedAt())
@@ -42,10 +45,14 @@ public class MenuMapper {
         return menu.getStatus() != MenuStatus.ACTIVE;
     }
 
-    public Menu toEntity(AdminMenuCreateRequest request) {
+    public Menu toEntity(
+            AdminMenuCreateRequest request,
+            String imageUrl
+    ) {
         return Menu.builder()
                 .name(request.name())
                 .description(request.description())
+                .imageUrl(imageUrl)
                 .price(request.price())
                 .stock(request.stock())
                 .status(MenuStatus.ACTIVE)
@@ -55,11 +62,13 @@ public class MenuMapper {
 
     public void updateEntity(
             Menu menu,
-            AdminMenuUpdateRequest request
+            AdminMenuUpdateRequest request,
+            String imageUrl
     ) {
         menu.updateInfo(
                 request.name(),
                 request.description(),
+                imageUrl,
                 request.price()
         );
     }

@@ -31,8 +31,8 @@ public class OrderMapper {
                 .address(order.getAddress())
                 .postNumber(order.getPostNumber())
                 .items(items)
-                .orderStatus(order.getOrderStatus())
-                .shipmentStatus(order.getShipmentStatus())
+                .orderStatus(order.getOrderStatus().getComment())
+                .shipmentStatus(order.getShipmentStatus().getComment())
                 .totalPrice(order.getTotalPrice())
                 .build();
     }

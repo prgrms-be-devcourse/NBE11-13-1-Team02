@@ -1,6 +1,10 @@
 spring:
   application:
     name: iLoveCoffee
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
 
   datasource:
     url: jdbc:h2:tcp://localhost:9092/mem:testdb;MODE=MySQL;CASE_INSENSITIVE_IDENTIFIERS=TRUE;NON_KEYWORDS=USER
@@ -45,12 +49,13 @@ logging:
   logback:
     rollingpolicy:
       file-name-pattern: "logs/archived/%d{yyyy-MM-dd}.%i.log.gz"
-      max-file-size: 10MB
+      max-file-size: 100MB
       max-history: 30
       total-size-cap: 1GB
 
   slack:
     webhook-url: ${SLACK_WEBHOOK_URL}
+
 
 springdoc:
   swagger-ui:

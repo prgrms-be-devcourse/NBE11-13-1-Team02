@@ -12,11 +12,13 @@ import com.example.ilovecoffee.dto.menu.response.MenuResponse;
 import com.example.ilovecoffee.exception.MenuNotFoundException;
 import com.example.ilovecoffee.exception.MenuNotInTrashException;
 import com.example.ilovecoffee.mapper.MenuMapper;
+import com.example.ilovecoffee.service.component.ImageStorageManager;
 import com.example.ilovecoffee.service.component.InventoryManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -29,7 +31,7 @@ public class MenuService {
     private final MenuMapper menuMapper;
     private final MenuRepository menuRepository;
     private final MenuVersionRepository menuVersionRepository;
-    private final InventoryManager inventoryManager;
+    private final ImageStorageManager imageStorageManager;
 
     // 고객용
     public List<MenuResponse> findAllForCustomer() {
@@ -55,8 +57,12 @@ public class MenuService {
 
     // 관리자용
     @Transactional
-    public AdminMenuResponse create(AdminMenuCreateRequest request) {
-        Menu menu = menuMapper.toEntity(request);
+    public AdminMenuResponse create(
+            AdminMenuCreateRequest request,
+            MultipartFile image
+    ) {
+        String imageUrl = imageStorageManager.store(image);
+        Menu menu = menuMapper.toEntity(request, imageUrl);
         Menu saved = menuRepository.save(menu);
         log.info("메뉴 생성됨: id={}, name={}", saved.getId(), saved.getName());
         return menuMapper.toAdminMenuResponse(saved);
@@ -65,17 +71,18 @@ public class MenuService {
     @Transactional
     public AdminMenuResponse update(
             Long id,
-            AdminMenuUpdateRequest request
+            AdminMenuUpdateRequest request,
+            MultipartFile image
     ) {
         Menu menu = findByIdOrThrow(id);
         archive(menu);
-        menuMapper.updateEntity(menu, request);
-        int stock = request.stock() - menu.getStock();
-        if(stock > 0) {
-            inventoryManager.replenish(menu.getId(), stock);
-        } else if(stock < 0) {
-            inventoryManager.decrease(menu.getId(), -stock);
+
+        String imageUrl = menu.getImageUrl();
+        if (image != null && !image.isEmpty()) {
+            imageUrl = imageStorageManager.store(image);
         }
+        menuMapper.updateEntity(menu, request, imageUrl);
+        menuMapper.updateStock(menu, request.stock());
         log.info("메뉴 수정됨: id={}, name={}", id, menu.getName());
         return menuMapper.toAdminMenuResponse(menu);
     }
@@ -95,8 +102,10 @@ public class MenuService {
     @Transactional
     public void permanentlyDelete(Long id) {
         Menu menu = findByIdOrThrow(id);
-
         validateDeletedMenu(menu);
+
+        String imageUrl = menu.getImageUrl();
+        imageStorageManager.delete(imageUrl);
 
         archive(menu);
         menuRepository.delete(menu);

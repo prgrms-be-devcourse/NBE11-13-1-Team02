@@ -50,6 +50,7 @@ public class OrderService {
             );
 
             order.addItem(orderItem);
+            order.suspend();
         }
 
         Order savedOrder = orderRepository.save(order);
@@ -67,6 +68,11 @@ public class OrderService {
         return orderRepository.findAllByEmail(email).stream()
                 .map(orderMapper::toOrderResponse)
                 .toList();
+    }
+
+    public OrderResponse findById(Long id) {
+        Order order = orderRepository.findById(id).orElseThrow(OrderNotFoundException::new);
+        return orderMapper.toOrderResponse(order);
     }
 
     @Transactional
@@ -101,8 +107,10 @@ public class OrderService {
 
     private Order findPendingOrderOrCreate(OrderRequest request) {
         return orderRepository
-                .findFirstByEmailAndOrderStatusOrderByIdDesc(
+                .findFirstByEmailAndPostNumberAndAddressAndOrderStatusOrderByIdDesc(
                         request.email(),
+                        request.postNumber(),
+                        request.address(),
                         OrderStatus.PENDING
                 )
                 .orElseGet(() -> Order.create(
