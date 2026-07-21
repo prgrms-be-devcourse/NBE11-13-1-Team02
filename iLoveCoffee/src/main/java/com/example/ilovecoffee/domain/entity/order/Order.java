@@ -21,6 +21,7 @@ import static lombok.AccessLevel.PROTECTED;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor(access = PROTECTED)
+@Table(name = "orders")
 public class Order {
 
     @Id

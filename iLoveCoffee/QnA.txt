@@ -1,0 +1,27 @@
+코드 리뷰, QnA
+
+- Repository ->
+	name, email -> VARCHAR(250), 길이를 줄일 수 있는지 (기준), 데이터 제한 세팅 방법
+	-- FK 제약조건 설정
+CONSTRAINT fk_order_item_order FOREIGN KEY (order_id) REFERENCES orders (id) ON DELETE CASCADE,
+CONSTRAINT fk_order_item_menu  FOREIGN KEY (menu_id)  REFERENCES menu (id)
+
+	주문건에 관련해서는 OrderId 가 날아가면 orderItems가 모두 삭제되어야 맞다 생각
+	메뉴를 삭제하면, 해당 ID가 삭제됐다 해서 OrderItem이 삭제될 필요는 없다
+	DELETE CASCADE 의미
+
+- OrderService ->
+	- OrderService가 SRP 관점에서 어디까지 책임져야 하는지
+	- 현 시점에서 너무 많은 책임을 지고 있다고 생각함
+	- InventoryService로 재고 관리는 따로 일임함
+	- 운영 관점에서 상태전이, 취소, 삭제, 조회를 어디까지 분리하는 	것이 적절한지
+
+- MenuService ->
+	 update -> 현재는 더티 체킹 방식을 사용하지만,
+	의도를 드러내기 위해 save()를 명시하는 방법 중, 팀 컨벤션, 성능, 가독성 측면에서 어떤 기준을 권장하시는지
+
+- OrderItem -> menuId ->
+	OrderItem이 menu_id를 FK로 참조하면서 name, price도 스냅샷으로 보관하는 방식과,
+	아예 FK 없이 menuId, name, price만 값으로 저장하는 방식 중
+	주문 이력 보존 관점에서 어떤 선택이 더 적절한지 궁금합니다.
+	메뉴 삭제·이름 변경·가격 변경 이후에도 과거 주문 내역은 유지되어야 합니다.

@@ -1,15 +1,15 @@
-package com.example.ilovecoffee.service.order;
+package com.example.ilovecoffee.service.component;
 
 import com.example.ilovecoffee.domain.entity.menu.Menu;
 import com.example.ilovecoffee.domain.entity.order.OrderItem;
 import com.example.ilovecoffee.domain.repository.MenuRepository;
 import com.example.ilovecoffee.exception.MenuNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 @RequiredArgsConstructor
-public class InventoryService {
+public class InventoryManager {
     private final MenuRepository menuRepository;
 
     public OrderItem decrease(Long menuId, int quantity) {
@@ -18,18 +18,18 @@ public class InventoryService {
         return OrderItem.from(menu, quantity);
     }
 
-    public void increase(Long menuId, int quantity) {
+    public void replenish(Long menuId, int quantity) {
         Menu menu = findMenu(menuId);
         menu.replenishStock(quantity);
-    }
-
-    public void restore(Long menuId, int quantity) {
-       Menu menu = findMenu(menuId);
-       menu.restoreStock(quantity);
     }
 
     private Menu findMenu(Long menuId) {
         return menuRepository.findById(menuId)
                 .orElseThrow(MenuNotFoundException::new);
+    }
+
+    public void restoreIfPresent(Long menuId, int quantity) {
+        menuRepository.findById(menuId)
+                .ifPresent(menu -> menu.restoreStock(quantity));
     }
 }

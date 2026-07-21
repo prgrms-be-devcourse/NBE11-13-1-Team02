@@ -23,6 +23,10 @@ public class Menu {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Builder.Default
+    private long version = 1L;
+
     private String name;
     private String description;
     private long price;
@@ -39,17 +43,25 @@ public class Menu {
         this.deletedAt = LocalDateTime.now();
     }
 
-    public void update(
+    public void updateInfo(
             String name,
             String description,
-            long price,
-            int stock
+            long price
     ) {
         this.name = name;
         this.description = description;
         this.price = price;
-        this.stock = stock;
         this.updatedAt = LocalDateTime.now();
+        this.version++;
+    }
+
+    public void updateStock(int newStock) {
+        if(newStock < 0)
+            throw new InvalidQuantityException();
+        this.stock = newStock;
+        this.updatedAt = LocalDateTime.now();
+        if(stock == 0)
+            deactivate();
     }
 
     public void activate() {
@@ -65,7 +77,7 @@ public class Menu {
     }
 
     public void decrease(int quantity) {
-        if(quantity < 0) {
+        if(quantity <= 0) {
             throw new InvalidQuantityException();
         }
         if(stock < quantity) {

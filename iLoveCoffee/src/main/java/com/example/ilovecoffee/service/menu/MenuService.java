@@ -1,8 +1,10 @@
 package com.example.ilovecoffee.service.menu;
 
 import com.example.ilovecoffee.domain.entity.menu.Menu;
+import com.example.ilovecoffee.domain.entity.menu.MenuVersion;
 import com.example.ilovecoffee.domain.enums.MenuStatus;
 import com.example.ilovecoffee.domain.repository.MenuRepository;
+import com.example.ilovecoffee.domain.repository.MenuVersionRepository;
 import com.example.ilovecoffee.dto.menu.request.AdminMenuCreateRequest;
 import com.example.ilovecoffee.dto.menu.request.AdminMenuUpdateRequest;
 import com.example.ilovecoffee.dto.menu.response.AdminMenuResponse;
@@ -25,6 +27,7 @@ public class MenuService {
 
     private final MenuMapper menuMapper;
     private final MenuRepository menuRepository;
+    private final MenuVersionRepository menuVersionRepository;
 
     // 고객용
     public List<MenuResponse> findAllForCustomer() {
@@ -53,8 +56,12 @@ public class MenuService {
     }
 
     @Transactional
-    public AdminMenuResponse update(Long id, AdminMenuUpdateRequest request) {
+    public AdminMenuResponse update(
+            Long id,
+            AdminMenuUpdateRequest request
+    ) {
         Menu menu = findByIdOrThrow(id);
+        archive(menu);
         menuMapper.updateEntity(menu, request);
         log.info("메뉴 수정됨: id={}, name={}", id, menu.getName());
         return menuMapper.toAdminMenuResponse(menu);
@@ -75,10 +82,10 @@ public class MenuService {
     @Transactional
     public void permanentlyDelete(Long id) {
         Menu menu = findByIdOrThrow(id);
-        if (menu.getStatus() != MenuStatus.DELETED) {
-            log.warn("휴지통에 없는 메뉴 완전삭제 시도: id={}, status={}", id, menu.getStatus());
-            throw new MenuNotInTrashException();
-        }
+
+        validateDeletedMenu(menu);
+
+        archive(menu);
         menuRepository.delete(menu);
         log.info("메뉴 완전 삭제됨: id={}", id);
     }
@@ -87,6 +94,17 @@ public class MenuService {
         return menuRepository.findAllByStatus(MenuStatus.DELETED).stream()
                 .map(menuMapper::toAdminMenuResponse)
                 .toList();
+    }
+
+    private void archive(Menu menu) {
+        MenuVersion menuVersion = MenuVersion.from(menu);
+        menuVersionRepository.save(menuVersion);
+    }
+
+    private void validateDeletedMenu(Menu menu) {
+        if (menu.getStatus() != MenuStatus.DELETED) {
+            throw new MenuNotInTrashException();
+        }
     }
 
     private Menu findByIdOrThrow(Long id) {
