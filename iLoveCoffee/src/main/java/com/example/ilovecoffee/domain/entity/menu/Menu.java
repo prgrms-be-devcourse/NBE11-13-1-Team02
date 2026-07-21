@@ -29,6 +29,7 @@ public class Menu {
 
     private String name;
     private String description;
+    private String imageUrl;
     private long price;
     private int stock;
     @Enumerated(EnumType.STRING)
@@ -46,10 +47,12 @@ public class Menu {
     public void updateInfo(
             String name,
             String description,
+            String imageUrl,
             long price
     ) {
         this.name = name;
         this.description = description;
+        this.imageUrl = imageUrl;
         this.price = price;
         this.updatedAt = LocalDateTime.now();
         this.version++;

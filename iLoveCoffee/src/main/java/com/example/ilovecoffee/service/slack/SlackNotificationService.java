@@ -10,25 +10,54 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Map;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
-@Slf4j
 public class SlackNotificationService {
 
     @Value("${slack.webhook-url}")
     private String webhookUrl;
 
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
 
-    // 비동기(@Async)로 실행하여 메인 로직 멈춤 방지
+    /**
+     * 에러 발생 시 Slack으로 알림을 전송한다.
+     * 비동기로 실행되어 메인 요청 처리를 지연시키지 않는다.
+     */
     @Async
-    public void sendSlackAlert(ErrorResponse errorResponse) {
+    public void sendErrorNotification(ErrorResponse errorResponse) {
+
+        log.debug(
+                "[Slack 전송 요청] code={}, status={}",
+                errorResponse.code(),
+                errorResponse.status()
+        );
+
         try {
-            Map<String, Object> body = Map.of("text", "[ERROR]" + errorResponse);
-            //System.out.println(errorResponse);
-            restTemplate.postForEntity(webhookUrl, body, String.class);
+
+            Map<String, Object> body = Map.of(
+                    "text",
+                     errorResponse.toString()
+            );
+
+            restTemplate.postForEntity(
+                    webhookUrl,
+                    body,
+                    String.class
+            );
+
+            log.debug(
+                    "[Slack 전송 완료] code={}",
+                    errorResponse.code()
+            );
+
         } catch (Exception e) {
-            log.error("슬랙 전송 실패", e);
+
+            log.error(
+                    "[Slack 전송 실패] code={}",
+                    errorResponse.code(),
+                    e
+            );
         }
     }
 }

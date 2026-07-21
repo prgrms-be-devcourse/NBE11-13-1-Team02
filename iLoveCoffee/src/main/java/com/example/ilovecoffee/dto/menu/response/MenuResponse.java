@@ -7,6 +7,7 @@ public record MenuResponse(
         Long id,
         String name,
         String description,
+        String imageUrl,
         long price,
         int stock,
         boolean soldOut

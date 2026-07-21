@@ -12,11 +12,12 @@ import com.example.ilovecoffee.dto.menu.response.MenuResponse;
 import com.example.ilovecoffee.exception.MenuNotFoundException;
 import com.example.ilovecoffee.exception.MenuNotInTrashException;
 import com.example.ilovecoffee.mapper.MenuMapper;
-import com.example.ilovecoffee.service.component.InventoryManager;
+import com.example.ilovecoffee.service.component.ImageStorageManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -29,113 +30,268 @@ public class MenuService {
     private final MenuMapper menuMapper;
     private final MenuRepository menuRepository;
     private final MenuVersionRepository menuVersionRepository;
-    private final InventoryManager inventoryManager;
+    private final ImageStorageManager imageStorageManager;
 
     // 고객용
     public List<MenuResponse> findAllForCustomer() {
-        return menuRepository.findAllByStatusNot(MenuStatus.DELETED).stream()
+        log.debug("[고객용 메뉴 전체 조회 요청]");
+
+        List<MenuResponse> responses = menuRepository
+                .findAllByStatusNot(MenuStatus.DELETED)
+                .stream()
                 .map(menuMapper::toMenuResponse)
                 .toList();
-    }
-    public List<AdminMenuResponse> findAllForAdmin() {
-        return menuRepository.findAllByStatusNot(MenuStatus.DELETED).stream()
-                .map(menuMapper::toAdminMenuResponse)
-                .toList();
+
+        log.debug("[고객용 메뉴 전체 조회 완료] count={}", responses.size());
+
+        return responses;
     }
 
     public MenuResponse findByIdForCustomer(Long id) {
-        Menu menu = menuRepository.findByIdAndStatusNot(id, MenuStatus.DELETED)
-                .orElseThrow(() -> {
-                    log.debug("고객 조회 실패 - 존재하지 않거나 삭제된 메뉴: id={}", id);
-                    return new MenuNotFoundException();
-                });
+        log.debug("[고객용 메뉴 상세 조회 요청] menuId={}", id);
+
+        Menu menu = menuRepository
+                .findByIdAndStatusNot(id, MenuStatus.DELETED)
+                .orElseThrow(() -> customerMenuNotFound(id));
+
+        log.debug(
+                "[고객용 메뉴 상세 조회 완료] menuId={}, name={}, status={}",
+                menu.getId(),
+                menu.getName(),
+                menu.getStatus()
+        );
 
         return menuMapper.toMenuResponse(menu);
     }
 
     // 관리자용
+    public List<AdminMenuResponse> findAllForAdmin() {
+        log.debug("[관리자용 메뉴 전체 조회 요청]");
+
+        List<AdminMenuResponse> responses = menuRepository
+                .findAllByStatusNot(MenuStatus.DELETED)
+                .stream()
+                .map(menuMapper::toAdminMenuResponse)
+                .toList();
+
+        log.debug("[관리자용 메뉴 전체 조회 완료] count={}", responses.size());
+
+        return responses;
+    }
+
     @Transactional
-    public AdminMenuResponse create(AdminMenuCreateRequest request) {
-        Menu menu = menuMapper.toEntity(request);
+    public AdminMenuResponse create(
+            AdminMenuCreateRequest request,
+            MultipartFile image
+    ) {
+        log.info(
+                "[메뉴 생성 요청] name={}, price={}, stock={}, hasImage={}",
+                request.name(),
+                request.price(),
+                request.stock(),
+                image != null && !image.isEmpty()
+        );
+
+        String imageUrl = imageStorageManager.store(image);
+        Menu menu = menuMapper.toEntity(request, imageUrl);
         Menu saved = menuRepository.save(menu);
-        log.info("메뉴 생성됨: id={}, name={}", saved.getId(), saved.getName());
+
+        log.info(
+                "[메뉴 생성 완료] menuId={}, name={}, status={}, stock={}",
+                saved.getId(),
+                saved.getName(),
+                saved.getStatus(),
+                saved.getStock()
+        );
+
         return menuMapper.toAdminMenuResponse(saved);
     }
 
     @Transactional
     public AdminMenuResponse update(
             Long id,
-            AdminMenuUpdateRequest request
+            AdminMenuUpdateRequest request,
+            MultipartFile image
     ) {
+        log.info(
+                "[메뉴 수정 요청] menuId={}, name={}, price={}, stock={}, hasImage={}",
+                id,
+                request.name(),
+                request.price(),
+                request.stock(),
+                image != null && !image.isEmpty()
+        );
+
         Menu menu = findByIdOrThrow(id);
+
         archive(menu);
-        menuMapper.updateEntity(menu, request);
-        int stock = request.stock() - menu.getStock();
-        if(stock > 0) {
-            inventoryManager.replenish(menu.getId(), stock);
-        } else if(stock < 0) {
-            inventoryManager.decrease(menu.getId(), -stock);
+
+        String imageUrl = menu.getImageUrl();
+
+        if (image != null && !image.isEmpty()) {
+            imageUrl = imageStorageManager.store(image);
+
+            log.debug(
+                    "[메뉴 이미지 변경] menuId={}, imageUrl={}",
+                    id,
+                    imageUrl
+            );
         }
-        log.info("메뉴 수정됨: id={}, name={}", id, menu.getName());
+
+        menuMapper.updateEntity(menu, request, imageUrl);
+        menuMapper.updateStock(menu, request.stock());
+
+        log.info(
+                "[메뉴 수정 완료] menuId={}, name={}, status={}, stock={}",
+                menu.getId(),
+                menu.getName(),
+                menu.getStatus(),
+                menu.getStock()
+        );
+
         return menuMapper.toAdminMenuResponse(menu);
     }
 
     @Transactional
     public void softDelete(Long id) {
-        findByIdOrThrow(id).softDelete();
-        log.info("메뉴 소프트 삭제됨(휴지통행): id={}", id);
+        log.info("[메뉴 소프트 삭제 요청] menuId={}", id);
+
+        Menu menu = findByIdOrThrow(id);
+        menu.softDelete();
+
+        log.info(
+                "[메뉴 소프트 삭제 완료] menuId={}, changedStatus={}",
+                menu.getId(),
+                menu.getStatus()
+        );
     }
 
     @Transactional
     public void restore(Long id) {
-        findByIdOrThrow(id).activate();
-        log.info("메뉴 복원됨: id={}", id);
+        log.info("[메뉴 복원 요청] menuId={}", id);
+
+        Menu menu = findByIdOrThrow(id);
+        menu.activate();
+
+        log.info(
+                "[메뉴 복원 완료] menuId={}, changedStatus={}",
+                menu.getId(),
+                menu.getStatus()
+        );
     }
 
     @Transactional
     public void permanentlyDelete(Long id) {
+        log.info("[메뉴 완전 삭제 요청] menuId={}", id);
+
         Menu menu = findByIdOrThrow(id);
+
+        log.debug(
+                "[메뉴 완전 삭제 검증] menuId={}, currentStatus={}",
+                menu.getId(),
+                menu.getStatus()
+        );
 
         validateDeletedMenu(menu);
 
+        String imageUrl = menu.getImageUrl();
+
         archive(menu);
+        imageStorageManager.delete(imageUrl);
         menuRepository.delete(menu);
-        log.info("메뉴 완전 삭제됨: id={}", id);
+
+        log.info(
+                "[메뉴 완전 삭제 완료] menuId={}, imageUrl={}",
+                id,
+                imageUrl
+        );
     }
 
     public List<AdminMenuResponse> findTrash() {
-        return menuRepository.findAllByStatus(MenuStatus.DELETED).stream()
+        log.debug("[휴지통 메뉴 조회 요청]");
+
+        List<AdminMenuResponse> responses = menuRepository
+                .findAllByStatus(MenuStatus.DELETED)
+                .stream()
                 .map(menuMapper::toAdminMenuResponse)
                 .toList();
-    }
 
-    private void archive(Menu menu) {
-        MenuVersion menuVersion = MenuVersion.from(menu);
-        menuVersionRepository.save(menuVersion);
+        log.debug("[휴지통 메뉴 조회 완료] count={}", responses.size());
+
+        return responses;
     }
 
     @Transactional
     public void activate(Long id) {
-        findByIdOrThrow(id).activate();
-        log.info("메뉴 활성화됨: id={}", id);
+        log.info("[메뉴 활성화 요청] menuId={}", id);
+
+        Menu menu = findByIdOrThrow(id);
+        menu.activate();
+
+        log.info(
+                "[메뉴 활성화 완료] menuId={}, changedStatus={}",
+                menu.getId(),
+                menu.getStatus()
+        );
     }
 
     @Transactional
     public void deactivate(Long id) {
-        findByIdOrThrow(id).deactivate();
-        log.info("메뉴 비활성화됨: id={}", id);
+        log.info("[메뉴 비활성화 요청] menuId={}", id);
+
+        Menu menu = findByIdOrThrow(id);
+        menu.deactivate();
+
+        log.info(
+                "[메뉴 비활성화 완료] menuId={}, changedStatus={}",
+                menu.getId(),
+                menu.getStatus()
+        );
+    }
+
+    private void archive(Menu menu) {
+        log.debug(
+                "[메뉴 버전 저장] menuId={}, version={}, name={}, price={}",
+                menu.getId(),
+                menu.getVersion(),
+                menu.getName(),
+                menu.getPrice()
+        );
+
+        MenuVersion menuVersion = MenuVersion.from(menu);
+        menuVersionRepository.save(menuVersion);
     }
 
     private void validateDeletedMenu(Menu menu) {
         if (menu.getStatus() != MenuStatus.DELETED) {
+            log.warn(
+                    "[메뉴 완전 삭제 검증 실패] menuId={}, currentStatus={}",
+                    menu.getId(),
+                    menu.getStatus()
+            );
+
             throw new MenuNotInTrashException();
         }
     }
 
     private Menu findByIdOrThrow(Long id) {
-        return menuRepository.findById(id).orElseThrow(() -> {
-            log.warn("존재하지 않는 메뉴: id={}", id);
-            return new MenuNotFoundException();
-        });
+        log.debug("[메뉴 조회] menuId={}", id);
+
+        return menuRepository.findById(id)
+                .orElseThrow(() -> menuNotFound(id));
+    }
+
+    private MenuNotFoundException menuNotFound(Long id) {
+        log.warn("[메뉴 조회 실패] menuId={}", id);
+        return new MenuNotFoundException();
+    }
+
+    private MenuNotFoundException customerMenuNotFound(Long id) {
+        log.warn(
+                "[고객용 메뉴 조회 실패] menuId={}, reason=존재하지 않거나 삭제된 메뉴",
+                id
+        );
+
+        return new MenuNotFoundException();
     }
 }

@@ -20,8 +20,7 @@ public record OrderRequest(
         @NotBlank
         String address,
 
-        @Valid
         @NotEmpty
-        List<OrderItemRequest> items
+        List<@Valid OrderItemRequest> items
 ) {
 }

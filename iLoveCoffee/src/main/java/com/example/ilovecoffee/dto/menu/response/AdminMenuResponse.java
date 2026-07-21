@@ -12,8 +12,10 @@ public record AdminMenuResponse(
         Long id,
         String name,
         String description,
+        String imageUrl,
         long price,
         int stock,
+        String statusComment,
         MenuStatus status,
         @JsonFormat(pattern = DateformatConstant.DATE_FORMAT)
         LocalDateTime createdAt,

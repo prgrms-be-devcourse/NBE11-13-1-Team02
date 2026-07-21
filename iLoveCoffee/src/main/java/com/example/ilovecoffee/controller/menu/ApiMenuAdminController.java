@@ -7,8 +7,10 @@ import com.example.ilovecoffee.service.menu.MenuService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -25,25 +27,30 @@ public class ApiMenuAdminController {
         return ResponseEntity.ok(responses);
     }
 
-    @PostMapping("/add")
+    @PostMapping(
+            value = "/add",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
     public ResponseEntity<AdminMenuResponse> createMenu(
-            @Valid @RequestBody AdminMenuCreateRequest request
+            @Valid @RequestPart("request") AdminMenuCreateRequest request,
+            @RequestPart(value = "image", required = false) MultipartFile image
     ) {
-        AdminMenuResponse response = menuService.create(request);
-
+        AdminMenuResponse response = menuService.create(request, image);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @PutMapping("/{id}/update")
+    @PutMapping(
+            value = "/{id}/update",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
     public ResponseEntity<AdminMenuResponse> updateMenu(
             @PathVariable Long id,
-            @Valid @RequestBody AdminMenuUpdateRequest request
+            @Valid @RequestPart("request") AdminMenuUpdateRequest request,
+            @RequestPart(value = "image", required = false) MultipartFile image
     ) {
-        AdminMenuResponse response = menuService.update(id, request);
-
+        AdminMenuResponse response = menuService.update(id, request, image);
         return ResponseEntity.ok(response);
     }
-
 
     @DeleteMapping("/{id}/delete")
     public ResponseEntity<Void> deleteMenu(

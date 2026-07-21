@@ -19,8 +19,8 @@ public record OrderResponse(
         List<OrderItemResponse> items,
         long totalPrice,
 
-        OrderStatus orderStatus,
-        ShipmentStatus shipmentStatus,
+        String orderStatus,
+        String shipmentStatus,
 
         @JsonFormat(pattern = DateformatConstant.DATE_FORMAT)
         LocalDateTime orderAt,
