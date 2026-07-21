@@ -41,3 +41,5 @@ logs/
 **/logs/
 
 *.log
+
+src/main/resources/application-local.yaml
