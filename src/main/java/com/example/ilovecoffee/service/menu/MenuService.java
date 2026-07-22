@@ -170,7 +170,6 @@ public class MenuService {
     }
 
     @Transactional
-
     public void restore(Long id) {
         log.info("[메뉴 복원 요청] menuId={}", id);
         Menu menu = findByIdOrThrow(id);
