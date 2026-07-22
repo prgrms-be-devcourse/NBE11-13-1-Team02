@@ -40,11 +40,14 @@ public class ApiAdminAuthController {
     }
 
     @GetMapping("/check")
-    public ResponseEntity<Boolean> status(
+
+    public ResponseEntity<Void> status(
             HttpServletRequest httpRequest
     ) {
         HttpSession session = httpRequest.getSession(false);
-
-        return ResponseEntity.ok(adminAuthService.isAdmin(session));
+        if (!adminAuthService.isAdmin(session)) {
+            return ResponseEntity.status(401).build();
+        }
+        return ResponseEntity.noContent().build();
     }
 }

@@ -66,7 +66,7 @@ public class MenuMapper {
             String imageUrl
     ) {
         menu.updateInfo(
-                request.name(),
+                menu.getName(),
                 request.description(),
                 imageUrl,
                 request.price()
