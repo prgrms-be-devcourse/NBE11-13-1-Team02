@@ -4,48 +4,16 @@ services:
   mysql-db:
     image: mysql:8.0
     container_name: mysql-db
-
     ports:
       - "3307:3306"
-
     environment:
-      MYSQL_ROOT_PASSWORD: 1234
-      MYSQL_DATABASE: ilovecoffee
-
+      MYSQL_ROOT_PASSWORD: "1234"
+      MYSQL_DATABASE: testdb
     volumes:
       - mysql_data:/var/lib/mysql
-
     command:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
-
-    healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-p1234"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
-
-  backend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-
-    volumes:
-      - ./thumbnails:/app/thumbnails
-
-    container_name: ilovecoffee-backend
-
-    ports:
-      - "8080:8080"
-
-    environment:
-      DB_URL: jdbc:mysql://mysql-db:3306/ilovecoffee?serverTimezone=Asia/Seoul&characterEncoding=UTF-8
-      DB_USERNAME: root
-      DB_PASSWORD: 1234
-
-    depends_on:
-      mysql-db:
-        condition: service_healthy
 
 volumes:
   mysql_data:
