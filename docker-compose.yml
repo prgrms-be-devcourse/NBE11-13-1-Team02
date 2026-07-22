@@ -1,12 +1,19 @@
 version: '3.8'
 
 services:
-  h2-db:
-    image: eclipse-temurin:17-jre
-    container_name: h2-db
+  mysql-db:
+    image: mysql:8.0
+    container_name: mysql-db
     ports:
-      - "8082:8082" # Web Console
-      - "9092:9092" # TCP Port
-    command: >
-      bash -c "curl -sL https://repo1.maven.org/maven2/com/h2database/h2/2.2.224/h2-2.2.224.jar -o /tmp/h2.jar &&
-               java -cp /tmp/h2.jar org.h2.tools.Server -web -webAllowOthers -webPort 8082 -tcp -tcpAllowOthers -tcpPort 9092 -ifNotExists"
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "1234"
+      MYSQL_DATABASE: testdb
+    volumes:
+      - mysql_data:/var/lib/mysql
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+
+volumes:
+  mysql_data:
