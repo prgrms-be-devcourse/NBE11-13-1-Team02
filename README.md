@@ -81,7 +81,6 @@ REST API 기반으로 Spring Boot와 React를 연동하였습니다.
 - Git
 - GitHub
 - IntelliJ IDEA
-- VS Code
 - Swagger
 
 ---
@@ -145,31 +144,7 @@ Frontend
 
 ---
 
-# 🚀 실행 방법
 
-## Backend
-
-```bash
-git clone https://github.com/your-repository.git
-
-cd backend
-
-./gradlew bootRun
-```
-
----
-
-## Frontend
-
-```bash
-cd frontend
-
-npm install
-
-npm run dev
-```
-
----
 
 # 📸 화면
 
@@ -186,8 +161,6 @@ npm run dev
 - 메뉴 등록
 - 주문 관리
 - 주문 상세
-
-> 프로젝트 화면은 `/docs/images` 폴더에 추가 예정
 
 ---
 
@@ -233,6 +206,7 @@ npm run dev
 ### ☕ 메뉴 관리
 
 - Soft Delete
+- 최근 삭제된 메뉴에서 Hard Delete 가능
 - 활성 / 비활성 관리
 - 이미지 변경 지원
 
@@ -247,41 +221,14 @@ npm run dev
 
 ---
 
-# 📖 ERD
-
-ERD 이미지를 추가할 예정입니다.
-
-```
-docs/images/ERD.png
-```
-
----
-
-# 📷 Architecture
-
-Architecture 이미지를 추가할 예정입니다.
-
-```
-docs/images/architecture.png
-```
-
----
-
 # 📌 향후 개선 사항
 
-- Redis 적용
 - 동시성 제어
 - JWT 로그인
 - 관리자 권한 관리
-- 결제 API 연동
-- Docker
-- AWS 배포
-- CI/CD 구축
 
 ---
 
 # 👨‍💻 Team
 
 Programmers Backend DevCourse Team Project
-
-Spring Boot + React Coffee Ordering Service
