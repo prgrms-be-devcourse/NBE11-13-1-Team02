@@ -14,53 +14,55 @@ spring:
 
   jpa:
     database-platform: org.hibernate.dialect.MySQLDialect
+    defer-datasource-initialization: true # Flyway 우선 실행
     hibernate:
-      ddl-auto: validate # 엔티티와 DB 테이블 구조 일치 여부 검증
+      ddl-auto: update # 엔티티와 DB 테이블 구조 일치 여부 검증
     properties:
       hibernate:
         format_sql: true
-    show-sql: false # logging.level 설정과 맞춰 필요시 조절
+    show-sql: false
 
-  # Flyway 마이그레이션 설정 추가
+  # 3. Flyway 설정
   flyway:
     enabled: true
     baseline-on-migrate: true
     locations: classpath:db/migration
 
-  # Spring 기본 SQL 초기화 옵션은 Flyway 사용을 위해 제거/비활성화
+  # 4. Spring 기본 SQL 초기화 비활성화 (Flyway 전용)
   sql:
     init:
       mode: never
 
+# 5. Slack 환경 변수 및 기본값
 slack:
   webhook-url: ${SLACK_WEBHOOK_URL:https://hooks.slack.com/services/dummy/url}
 
+# 6. 관리자 인증 정보
+admin:
+  username: ${ADMIN_USERNAME:admin}
+  password: ${ADMIN_PASSWORD:admin1234}
+
+# 7. 로깅 설정
 logging:
   level:
     root: INFO
     # 우리 프로젝트 로그
     com.example.ilovecoffee: DEBUG
 
-    # Hibernate가 실행한 SQL
+    # Hibernate 실행 SQL (필요시 ON)
     org.hibernate.SQL: OFF
-
-    # SQL 파라미터 바인딩 값
     org.hibernate.orm.jdbc.bind: OFF
 
     # Flyway 초기화 및 실행 로그
     org.flywaydb: DEBUG
 
   pattern:
-    # 콘솔용 로그 포맷
     console: "[%d{yyyy-MM-dd HH:mm:ss.SSS}] [%-5level] [%15.15t] %-40.40logger{36} : %msg%n"
-    # 파일 저장용 콘솔 포맷
     file: "%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %15.15t %-40.40logger{36} : %msg%n"
 
-  # 로그 파일 생성 설정
   file:
     name: logs/application.log
 
-  # 로그 파일 보관 설정
   logback:
     rollingpolicy:
       file-name-pattern: "logs/archived/%d{yyyy-MM-dd}.%i.log.gz"
@@ -74,5 +76,5 @@ springdoc:
 
 order:
   batch:
-    cutoff-cron: "0 48 23 * * *"
+    cutoff-cron: "0 22 09 * * *"
     advance-delay-ms: 10000
