@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.time.LocalDateTime;
 
@@ -88,6 +89,22 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .badRequest()
+                .body(response);
+    }
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNoResourceFound(
+            NoResourceFoundException e,
+            HttpServletRequest request
+    ) {
+        log.debug("Static resource not found: {}", request.getRequestURI());
+        var response = createResponse(
+                HttpStatus.NOT_FOUND,
+                "RESOURCE_NOT_FOUND",
+                "요청한 리소스를 찾을 수 없습니다.",
+                "/",
+                e.getResourcePath()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(response);
     }
 
