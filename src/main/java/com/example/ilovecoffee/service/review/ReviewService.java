@@ -40,6 +40,7 @@ public class ReviewService {
 
         var review = Review.create(
                 menu.getId(),
+                menu.getName(),
                 menu.getVersion(),
                 request.email(),
                 request.rating(),

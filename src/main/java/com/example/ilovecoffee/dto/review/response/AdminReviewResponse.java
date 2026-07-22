@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 public record AdminReviewResponse (
     Long id,
     Long menuId,
+    String menuName,
     Long menuVersion,
     String email,
     int rating,
