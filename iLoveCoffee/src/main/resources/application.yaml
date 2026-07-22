@@ -55,3 +55,7 @@ logging:
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
+
+admin:
+  username: ${ADMIN_USERNAME:admin}
+  password: ${ADMIN_PASSWORD:admin1234}
