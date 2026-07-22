@@ -1,6 +1,7 @@
 package com.example.ilovecoffee.controller.menu;
 
 import com.example.ilovecoffee.dto.menu.request.AdminMenuCreateRequest;
+import com.example.ilovecoffee.dto.menu.request.AdminMenuReplenishRequest;
 import com.example.ilovecoffee.dto.menu.request.AdminMenuUpdateRequest;
 import com.example.ilovecoffee.dto.menu.response.AdminMenuResponse;
 import com.example.ilovecoffee.service.menu.MenuService;
@@ -90,6 +91,19 @@ public class ApiMenuAdminController {
         return ResponseEntity.noContent().build();
     }
 
+    @GetMapping("/sold-out")
+    public ResponseEntity<List<AdminMenuResponse>> findSoldOutMenus() {
+        return ResponseEntity.ok(menuService.findSoldOutMenus());
+    }
 
+    @PatchMapping("/{id}/replenish")
+    public ResponseEntity<AdminMenuResponse> replenish(
+            @PathVariable Long id,
+            @Valid @RequestBody AdminMenuReplenishRequest request
+    ) {
+        return ResponseEntity.ok(
+                menuService.replenish(id, request)
+        );
+    }
 
 }

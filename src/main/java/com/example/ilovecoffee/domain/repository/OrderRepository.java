@@ -4,6 +4,7 @@ import com.example.ilovecoffee.domain.entity.order.Order;
 import com.example.ilovecoffee.domain.enums.OrderStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -15,5 +16,9 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             String postNumber,
             String address,
             OrderStatus orderStatus
+    );
+    List<Order> findAllByOrderAtGreaterThanEqualAndOrderAtLessThan(
+            LocalDateTime start,
+            LocalDateTime end
     );
 }

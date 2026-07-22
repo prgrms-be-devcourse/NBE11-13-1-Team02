@@ -82,6 +82,38 @@ public class MenuService {
         return responses;
     }
 
+    public List<AdminMenuResponse> findSoldOutMenus() {
+        log.debug("[품절 메뉴 조회 요청]");
+        var responses = menuRepository
+                .findAllByStockAndStatusNot(0, MenuStatus.DELETED)
+                .stream()
+                .map(menuMapper::toAdminMenuResponse)
+                .toList();
+        log.debug("[품절 메뉴 조회 완료] count={}", responses.size());
+        return responses;
+    }
+
+    @Transactional
+    public AdminMenuResponse replenish(
+            Long id,
+            AdminMenuReplenishRequest request
+    ) {
+        log.info(
+                "[메뉴 재입고 요청] menuId={}, quantity={}",
+                id,
+                request.quantity()
+        );
+        Menu menu = findByIdOrThrow(id);
+        inventoryManager.replenish(menu, request.quantity());
+        log.info(
+                "[메뉴 재입고 완료] menuId={}, stock={}",
+                menu.getId(),
+                menu.getStock()
+        );
+        return menuMapper.toAdminMenuResponse(menu);
+    }
+
+
     @Transactional
     public AdminMenuResponse create(
             AdminMenuCreateRequest request,
