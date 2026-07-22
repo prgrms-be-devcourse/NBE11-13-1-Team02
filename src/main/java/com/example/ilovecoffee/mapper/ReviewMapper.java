@@ -24,6 +24,7 @@ public class ReviewMapper {
         return AdminReviewResponse.builder()
                 .id(review.getId())
                 .menuId(review.getMenuId())
+                .menuName(review.getMenuName())
                 .menuVersion(review.getMenuVersion())
                 .email(review.getEmail())
                 .rating(review.getRating())

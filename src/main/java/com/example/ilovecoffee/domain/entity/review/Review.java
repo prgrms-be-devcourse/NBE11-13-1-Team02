@@ -35,6 +35,9 @@ public class Review {
     private Long menuId;
     @Column(name = "menu_version", nullable = false)
     private Long menuVersion;
+    @Column(name = "menu_name", nullable = false)
+    private String menuName;
+
     @Column(name = "email", nullable = false)
     private String email;
 
@@ -44,6 +47,7 @@ public class Review {
 
     public static Review create(
             long menuId,
+            String menuName,
             long version,
             String email,
             int rating,
@@ -51,6 +55,7 @@ public class Review {
     ) {
         return Review.builder()
                 .menuId(menuId)
+                .menuName(menuName)
                 .menuVersion(version)
                 .email(email)
                 .rating(rating)

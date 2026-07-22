@@ -60,6 +60,7 @@ CREATE TABLE IF NOT EXISTS order_item (
 CREATE TABLE IF NOT EXISTS review (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     menu_id BIGINT NOT NULL,
+    menu_name VARCHAR(100) NOT=NULL
     menu_version BIGINT NOT NULL,
     email VARCHAR(255) NOT NULL,
     rating INT NOT NULL,
@@ -67,4 +68,4 @@ CREATE TABLE IF NOT EXISTS review (
     created_at DATETIME NOT NULL,
     CONSTRAINT uk_review_menu_email
     UNIQUE (menu_id, email)
-);
+)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
