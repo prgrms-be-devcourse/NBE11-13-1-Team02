@@ -2,6 +2,7 @@ package com.example.ilovecoffee.service.component;
 
 import com.example.ilovecoffee.constant.PathConstant;
 import com.example.ilovecoffee.exception.ImageStorageException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -11,6 +12,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
+@Slf4j
 @Component
 public class ImageStorageManager {
 
@@ -47,14 +49,12 @@ public class ImageStorageManager {
         if (imageUrl == null || imageUrl.isBlank()) {
             return;
         }
-
         if (DEFAULT_IMAGE_URL.equals(imageUrl)) {
             return;
         }
         if (!imageUrl.startsWith(IMAGE_URL_PREFIX)) {
-            throw new ImageStorageException(
-                    "올바르지 않은 이미지 경로입니다."
-            );
+            log.warn("올바르지 않은 이미지 경로입니다. imageUrl={}", imageUrl);
+            return;
         }
         String storedFilename =
                 imageUrl.substring(IMAGE_URL_PREFIX.length());
@@ -62,15 +62,18 @@ public class ImageStorageManager {
                 .resolve(storedFilename)
                 .normalize();
         if (!targetPath.startsWith(PathConstant.THUMBNAIL_DIRECTORY)) {
-            throw new ImageStorageException(
-                    "올바르지 않은 이미지 경로입니다."
-            );
+            log.warn("썸네일 디렉터리를 벗어난 이미지 경로입니다. imageUrl={}", imageUrl);
+            return;
         }
         try {
-            Files.deleteIfExists(targetPath);
+            boolean deleted = Files.deleteIfExists(targetPath);
+            if (!deleted) {
+                log.warn("삭제할 이미지 파일이 존재하지 않습니다. path={}", targetPath);
+            }
         } catch (IOException e) {
-            throw new ImageStorageException(
-                    "이미지 삭제에 실패했습니다.",
+            log.error(
+                    "이미지 파일 삭제에 실패했습니다. 메뉴 삭제는 계속 진행합니다. path={}",
+                    targetPath,
                     e
             );
         }

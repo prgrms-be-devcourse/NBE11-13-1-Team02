@@ -9,13 +9,17 @@ public class SpaController {
     @GetMapping({
             "/",
             "/menus",
+            "/menus/{id}/detail",
             "/orders",
+            "/admin/login",
             "/admin/menus",
             "/admin/menus/recents",
+            "/admin/menus/deleted",
             "/admin/orders",
-            "/admin/menus/deleted"
+            "/admin/orders/{id}",
+            "/admin/reviews",
+            "/admin/menus/{id}/update"
     })
-
     public String forward() {
         return "forward:/index.html";
     }

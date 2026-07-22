@@ -18,8 +18,7 @@ public class InventoryManager {
         return OrderItem.from(menu, quantity);
     }
 
-    public void replenish(Long menuId, int quantity) {
-        Menu menu = findMenu(menuId);
+    public void replenish(Menu menu, int quantity) {
         menu.replenishStock(quantity);
     }
 

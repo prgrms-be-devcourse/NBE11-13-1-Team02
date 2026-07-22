@@ -76,5 +76,5 @@ springdoc:
 
 order:
   batch:
-    cutoff-cron: "0 0 9 * * *"
+    cutoff-cron: "0 20 18 * * *"
     advance-delay-ms: 10000

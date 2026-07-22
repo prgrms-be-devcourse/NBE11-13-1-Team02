@@ -6,6 +6,7 @@ import com.example.ilovecoffee.domain.enums.MenuStatus;
 import com.example.ilovecoffee.domain.repository.MenuRepository;
 import com.example.ilovecoffee.domain.repository.MenuVersionRepository;
 import com.example.ilovecoffee.dto.menu.request.AdminMenuCreateRequest;
+import com.example.ilovecoffee.dto.menu.request.AdminMenuReplenishRequest;
 import com.example.ilovecoffee.dto.menu.request.AdminMenuUpdateRequest;
 import com.example.ilovecoffee.dto.menu.response.AdminMenuResponse;
 import com.example.ilovecoffee.dto.menu.response.MenuResponse;
@@ -13,6 +14,7 @@ import com.example.ilovecoffee.exception.MenuNotFoundException;
 import com.example.ilovecoffee.exception.MenuNotInTrashException;
 import com.example.ilovecoffee.mapper.MenuMapper;
 import com.example.ilovecoffee.service.component.ImageStorageManager;
+import com.example.ilovecoffee.service.component.InventoryManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,6 +33,7 @@ public class MenuService {
     private final MenuRepository menuRepository;
     private final MenuVersionRepository menuVersionRepository;
     private final ImageStorageManager imageStorageManager;
+    private final InventoryManager inventoryManager;
 
     // 고객용
     public List<MenuResponse> findAllForCustomer() {
@@ -167,12 +170,11 @@ public class MenuService {
     }
 
     @Transactional
+
     public void restore(Long id) {
         log.info("[메뉴 복원 요청] menuId={}", id);
-
         Menu menu = findByIdOrThrow(id);
-        menu.activate();
-
+        menu.restore();
         log.info(
                 "[메뉴 복원 완료] menuId={}, changedStatus={}",
                 menu.getId(),
@@ -206,7 +208,7 @@ public class MenuService {
                 imageUrl
         );
     }
-
+    
     public List<AdminMenuResponse> findTrash() {
         log.debug("[휴지통 메뉴 조회 요청]");
 

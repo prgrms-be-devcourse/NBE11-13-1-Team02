@@ -14,9 +14,10 @@ public class OrderBatchManager {
     private final OrderRepository orderRepository;
 
     @Transactional
-    public void confirmPendingOrders() {
-        orderRepository.findAllByOrderStatus(OrderStatus.PENDING)
-                .forEach(Order::confirm);
+    public int confirmPendingOrders() {
+        var list = orderRepository.findAllByOrderStatus(OrderStatus.PENDING);
+        list.forEach(Order::confirm);
+        return list.size();
     }
 
     @Transactional

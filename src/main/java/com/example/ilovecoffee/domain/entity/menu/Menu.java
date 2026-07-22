@@ -3,6 +3,7 @@ package com.example.ilovecoffee.domain.entity.menu;
 import com.example.ilovecoffee.domain.enums.MenuStatus;
 import com.example.ilovecoffee.exception.InsufficientStockException;
 import com.example.ilovecoffee.exception.InvalidQuantityException;
+import com.example.ilovecoffee.exception.MenuNotInTrashException;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -105,5 +106,14 @@ public class Menu {
 
     public void replenishStock(int quantity) {
         this.increase(quantity);
+    }
+
+    public void restore() {
+        if (status != MenuStatus.DELETED) {
+            throw new MenuNotInTrashException();
+        }
+
+        status = MenuStatus.INACTIVE;
+        deletedAt = null;
     }
 }
