@@ -26,6 +26,7 @@ spring:
         - classpath:menu_version.sql
         - classpath:order.sql
         - classpath:order_item.sql
+        - classpath:review.sql
 
 logging:
   level:
@@ -70,5 +71,9 @@ springdoc:
 
 order:
   batch:
-    cutoff-cron: "0 48 23 * * *"
+    cutoff-cron: "0 22 09 * * *"
     advance-delay-ms: 10000
+
+admin:
+  username: ${ADMIN_USERNAME:admin}
+  password: ${ADMIN_PASSWORD:admin1234}
