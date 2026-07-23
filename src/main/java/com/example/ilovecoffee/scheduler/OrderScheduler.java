@@ -22,7 +22,10 @@ public class OrderScheduler {
     public void confirmCutoffOrders() {
         log.info("[스케줄러] 주문 확정 처리");
         int count = orderBatchManager.confirmPendingOrders();
-        slackNotificationService.sendMessage("확정 처리: " + count + "건");
+        slackNotificationService.sendMessage(
+                "🟢 주문 확정 완료\n" +
+                        "📦 처리 건수: " + count + "건"
+        );
     }
 
     @Scheduled(
