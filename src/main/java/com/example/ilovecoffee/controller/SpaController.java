@@ -18,7 +18,9 @@ public class SpaController {
             "/admin/orders",
             "/admin/orders/{id}",
             "/admin/reviews",
-            "/admin/menus/{id}/update"
+            "/admin/menus/{id}/update",
+            "/admin/menus/sold-out",
+            "/admin/statistics"
     })
     public String forward() {
         return "forward:/index.html";
