@@ -14,4 +14,4 @@ public record AdminReviewResponse (
     int rating,
     String content,
     LocalDateTime createdAt
-) {}
+) { }

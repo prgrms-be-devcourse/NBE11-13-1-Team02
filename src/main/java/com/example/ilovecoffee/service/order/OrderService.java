@@ -1,5 +1,6 @@
 package com.example.ilovecoffee.service.order;
 
+import com.example.ilovecoffee.constant.DateformatConstant;
 import com.example.ilovecoffee.domain.entity.menu.Menu;
 import com.example.ilovecoffee.domain.entity.order.Order;
 import com.example.ilovecoffee.domain.entity.order.OrderItem;
@@ -13,12 +14,15 @@ import com.example.ilovecoffee.exception.MenuNotFoundException;
 import com.example.ilovecoffee.exception.OrderNotFoundException;
 import com.example.ilovecoffee.mapper.OrderMapper;
 import com.example.ilovecoffee.service.component.InventoryManager;
+import com.example.ilovecoffee.service.slack.SlackNotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
@@ -30,6 +34,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final InventoryManager inventoryManager;
     private final MenuRepository menuRepository;
+    private final SlackNotificationService slackNotificationService;
 
     @Transactional
     public OrderResponse create(OrderRequest request) {
@@ -58,12 +63,6 @@ public class OrderService {
                     itemRequest.quantity()
             );
 
-            log.debug(
-                    "[재고 차감 완료] menuId={}, quantity={}",
-                    menu.getId(),
-                    itemRequest.quantity()
-            );
-
             OrderItem orderItem = OrderItem.of(
                     menu.getId(),
                     menu.getVersion(),
@@ -87,7 +86,26 @@ public class OrderService {
                 savedOrder.getTotalPrice(),
                 savedOrder.getItems().size()
         );
+        String items = savedOrder.getItems().stream()
+                .map(item -> "%s x%d    %,d원".formatted(
+                        item.getName(),
+                        item.getQuantity(),
+                        item.getSubtotal()
+                ))
+                .collect(Collectors.joining("\n"));
 
+        slackNotificationService.sendMessage("""
+            :inbox_tray: *신규 주문 접수*
+            %s
+            ────────────────────
+            :moneybag: 합계 : %,d원
+            접수 시간 : %s
+            ────────────────────
+            """.formatted(
+                    items,
+                savedOrder.getTotalPrice(),
+                order.getOrderAt().format(DateformatConstant.DATE_FORMATTER)
+        ));
         return orderMapper.toOrderResponse(savedOrder);
     }
 
